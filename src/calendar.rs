@@ -1,7 +1,10 @@
 #[derive(Debug)]
 pub enum UserError {
     InvalidMonth,
+    InvalidDay,
     InvalidHour,
+    InvalidMinute,
+    InvalidSecond,
 }
 
 #[derive(Debug)]
@@ -20,6 +23,25 @@ pub struct CalendarDate {
 /// I made the calendar date private so I can validate fields
 /// i.e. making sure months can't be over 13, hours over 24,...  
 impl CalendarDate {
+    pub fn is_leap_year(year: i32) -> bool {
+        (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+    }
+
+    pub fn days_in_month(month: u8, year: i32) -> Option<u8> {
+        match month {
+            1 | 3 | 5 | 7 | 8 | 10 | 12 => Some(31),
+            4 | 6 | 9 | 11 => Some(30),
+            2 => {
+                if Self::is_leap_year(year) {
+                    Some(29)
+                } else {
+                    Some(28)
+                }
+            }
+            _ => None,
+        }
+    }
+
     // Setter
     pub fn new(
         year: i32,
@@ -29,27 +51,31 @@ impl CalendarDate {
         minute: u8,
         second: f32,
     ) -> Result<Self, UserError> {
-        if month > 12 || month < 1 {
-            return Err(UserError::InvalidMonth);
+        let max_days = Self::days_in_month(month, year).ok_or(UserError::InvalidMonth)?;
+
+        if day < 1 || day > max_days {
+            return Err(UserError::InvalidDay);
         }
 
-        if hour > 24 || hour < 0 {
+        if hour > 23 {
             return Err(UserError::InvalidHour);
         }
 
+        if minute > 59 {
+            return Err(UserError::InvalidMinute);
+        }
+
+        if second.is_nan() || second < 0.0 || second > 60.0 {
+            return Err(UserError::InvalidSecond);
+        }
+
         Ok(Self {
-            year: year,
-
-            // Will need seperate validation. October 31st works but February 31st does not.
-            month: month,
-
-            day: day,
-
-            hour: hour,
-
-            minute: minute.clamp(0, 59),
-
-            second: second.clamp(0.0, 60.0),
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second,
         })
     }
 
