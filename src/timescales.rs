@@ -16,8 +16,37 @@ impl JdUtc {
     }
 }
 
-pub struct JdTt(pub f64);
-pub struct JdUt1(pub f64);
+#[derive(Debug)]
+pub struct JdTt {
+    day: f64,
+    fraction: f64,
+}
+
+impl JdTt {
+    pub fn new(day: f64, fraction: f64) -> Self {
+        Self { day, fraction }
+    }
+
+    pub fn value(&self) -> f64 {
+        self.day + self.fraction
+    }
+}
+
+#[derive(Debug)]
+pub struct JdUt1 {
+    day: f64,
+    fraction: f64,
+}
+
+impl JdUt1 {
+    pub fn new(day: f64, fraction: f64) -> Self {
+        Self { day, fraction }
+    }
+
+    pub fn value(&self) -> f64 {
+        self.day + self.fraction
+    }
+}
 
 pub fn calendar_date_to_julian_day_number(date: &CalendarDate) -> i32 {
     let year = date.year();
