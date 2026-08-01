@@ -65,10 +65,54 @@ fn test_sub_second_precision() {
 
 #[test]
 fn test_utc_to_julian_date_roundtrip() {
-    let date = calendar::CalendarDate::new(-1000, 12, 15, 12, 00, 0.0).expect("Not a valid date!");
-    let jd = timescales::calendar_date_to_julian_date(&date);
-    let round_trip_date = timescales::julian_date_to_calendar_date(&jd).expect("Not a valid date!");
-    assert_eq!(date, round_trip_date);
+    let times = [
+        (0, 0, 0.0),
+        (6, 30, 15.0),
+        (12, 0, 0.0),
+        (23, 59, 59.0),
+        (18, 37, 12.5),
+    ];
+
+    for y in -4000..3001 {
+        for m in 1..13 {
+            for d in 1..=days_in_month(y, m)
+                .ok_or(calendar::CalendarError::InvalidMonth)
+                .expect("Invalid Month")
+            {
+                for (i, t) in times.iter().enumerate() {
+                    let date = calendar::CalendarDate::new(y, m, d, t.0, t.1, t.2)
+                        .expect("Not a valid date!");
+                    let jd = timescales::calendar_date_to_julian_date(&date);
+                    let round_trip_date =
+                        timescales::julian_date_to_calendar_date(&jd).expect("Not a valid date!");
+                    assert_eq!(
+                        date, round_trip_date,
+                        "Expected {:?} found {:?}",
+                        date, round_trip_date
+                    );
+                }
+            }
+        }
+    }
+}
+
+fn is_leap_year(year: i32) -> bool {
+    (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+}
+
+fn days_in_month(year: i32, month: u8) -> Option<u8> {
+    match month {
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => Some(31),
+        4 | 6 | 9 | 11 => Some(30),
+        2 => {
+            if is_leap_year(year) {
+                Some(29)
+            } else {
+                Some(28)
+            }
+        }
+        _ => None,
+    }
 }
 
 fn get_jd(year: i32, month: u8, day: u8, hour: u8, minute: u8, second: f64) -> timescales::JdUtc {

@@ -14,6 +14,14 @@ impl JdUtc {
     pub fn value(&self) -> f64 {
         self.day + self.fraction
     }
+
+    pub fn day(&self) -> f64 {
+        self.day
+    }
+
+    pub fn fraction(&self) -> f64 {
+        self.fraction
+    }
 }
 
 #[derive(Debug)]
@@ -78,15 +86,19 @@ pub fn calendar_date_to_julian_date(date: &CalendarDate) -> JdUtc {
 }
 
 pub fn julian_date_to_calendar_date(date: &JdUtc) -> Result<CalendarDate, CalendarError> {
-    let v = date.value() + 0.5;
+    let shifted = date.day() + 0.5;
 
     // Seperate days and time
-    let mut z = v.floor();
-    let f = v - z;
+    let z0 = shifted.floor();
+    let r = shifted - z0;
+    let combined = r + date.fraction();
+    let carry = combined.floor();
+    let mut z = z0 + carry;
+    let f = combined - carry;
 
     // Get time
     let mut total_seconds = f * 86400.0;
-    total_seconds = (total_seconds * 1e6).round() / 1e6;
+    total_seconds = (total_seconds * 1e9).round() / 1e9;
     if total_seconds == 86400.0 {
         total_seconds = 0.0;
         z += 1.0;
