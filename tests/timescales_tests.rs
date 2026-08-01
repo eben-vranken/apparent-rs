@@ -65,7 +65,7 @@ fn test_sub_second_precision() {
 
 #[test]
 fn test_utc_to_julian_date_roundtrip() {
-    let date = calendar::CalendarDate::new(2002, 12, 15, 12, 00, 0.0).expect("Not a valid date!");
+    let date = calendar::CalendarDate::new(-1000, 12, 15, 12, 00, 0.0).expect("Not a valid date!");
     let jd = timescales::calendar_date_to_julian_date(&date);
     let round_trip_date = timescales::julian_date_to_calendar_date(&jd).expect("Not a valid date!");
     assert_eq!(date, round_trip_date);

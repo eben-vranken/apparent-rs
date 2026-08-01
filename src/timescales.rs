@@ -81,55 +81,39 @@ pub fn julian_date_to_calendar_date(date: &JdUtc) -> Result<CalendarDate, Calend
     let v = date.value() + 0.5;
 
     // Seperate days and time
-    let shifted_jd = JdUtc::new(v.trunc(), v.fract());
-    let z = shifted_jd.value().trunc();
-    let f = shifted_jd.value().fract();
+    let mut z = v.floor();
+    let f = v - z;
+
+    // Get time
+    let mut total_seconds = f * 86400.0;
+    total_seconds = (total_seconds * 1e6).round() / 1e6;
+    if total_seconds == 86400.0 {
+        total_seconds = 0.0;
+        z += 1.0;
+    }
+
+    let whole = total_seconds.floor() as i64;
+    let leftover = total_seconds - whole as f64;
+
+    let hour = whole / 3600;
+    let minute = (whole % 3600) / 60;
+    let second = whole % 60;
 
     // Century adjustment
-    let mut alpha = 0.0;
-    let mut a = 0.0;
-    let mut b = 0.0;
-
-    if z >= 2299161.0 {
-        alpha = ((z - 1867216.25) / 36524.25).floor();
-        a = z + 1.0 + alpha - (alpha / 4.0).floor();
-        b = a + 1524.0;
-    } else {
-        b = z + 1524.0;
-    }
+    let alpha = ((z - 1867216.25) / 36524.25).floor();
+    let a = z + 1.0 + alpha - (alpha / 4.0).floor();
+    let b = a + 1524.0;
 
     // Find Year, Month, and day
     let c = ((b - 122.1_f64) / 365.25).floor();
     let d = (365.25_f64 * c).floor();
     let e = ((b - d) / 30.6001_f64).floor();
 
-    let day = b - d - (30.6001_f64 * e).floor() + f.floor();
+    let day = b - d - (30.6001_f64 * e).floor();
 
-    let mut month = 0.0;
+    let month = if e < 14.0 { e - 1.0 } else { e - 13.0 };
 
-    if e < 14.0 {
-        month = e - 1.0;
-    } else {
-        month = e - 13.0;
-    }
-
-    let mut year = 0.0;
-
-    if month > 2.0 {
-        year = c - 4716.0;
-    } else {
-        year = c - 4715.0;
-    }
-
-    // Get time
-    let mut hour = f * 24.0;
-
-    let mut minute = hour.fract() * 60.0;
-    let mut second = minute.fract() * 60.0;
-
-    hour = hour.floor();
-    minute = minute.floor();
-    second = second.floor();
+    let year = if month > 2.0 { c - 4716.0 } else { c - 4715.0 };
 
     CalendarDate::new(
         year as i32,
@@ -137,6 +121,6 @@ pub fn julian_date_to_calendar_date(date: &JdUtc) -> Result<CalendarDate, Calend
         day as u8,
         hour as u8,
         minute as u8,
-        second,
+        second as f64 + leftover,
     )
 }
