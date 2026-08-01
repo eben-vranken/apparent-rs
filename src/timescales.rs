@@ -77,6 +77,15 @@ impl JdUt1 {
     pub fn value(&self) -> f64 {
         self.day + self.fraction
     }
+
+    /// DUT1 = UT1 − UTC, seconds.
+    /// Source: IERS Bulletin A, https://datacenter.iers.org/data/latestVersion/bulletinA.txt, retrieved 2nd of August 2026.
+    pub fn new_from_utc(date: &JdUtc, dut1: f64) -> Self {
+        Self {
+            day: date.day(),
+            fraction: date.fraction() + dut1 / 86400.0,
+        }
+    }
 }
 
 pub struct LeapSecondEntry {
