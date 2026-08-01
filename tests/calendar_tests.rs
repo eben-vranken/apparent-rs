@@ -112,7 +112,7 @@ fn test_invalid_second() {
 
 #[test]
 fn test_nan_second_not_accepted() {
-    let date = CalendarDate::new(2002, 12, 15, 12, 30, f32::NAN);
+    let date = CalendarDate::new(2002, 12, 15, 12, 30, f64::NAN);
     assert_eq!(date, Err(UserError::InvalidSecond))
 }
 

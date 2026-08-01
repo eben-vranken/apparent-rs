@@ -17,7 +17,7 @@ pub struct CalendarDate {
     // Time
     hour: u8,
     minute: u8,
-    second: f32,
+    second: f64,
 }
 
 /// I made the calendar date private so I can validate fields
@@ -49,7 +49,7 @@ impl CalendarDate {
         day: u8,
         hour: u8,
         minute: u8,
-        second: f32,
+        second: f64,
     ) -> Result<Self, UserError> {
         let max_days = Self::days_in_month(month, year).ok_or(UserError::InvalidMonth)?;
 
@@ -100,7 +100,7 @@ impl CalendarDate {
         self.minute
     }
 
-    pub fn second(&self) -> f32 {
+    pub fn second(&self) -> f64 {
         self.second
     }
 }
