@@ -96,6 +96,52 @@ fn test_utc_to_julian_date_roundtrip() {
     }
 }
 
+#[test]
+fn test_leap_seconds_table() {
+    let jd_a = get_jd(2020, 12, 31, 23, 59, 59.999);
+    let leap_seconds_a = timescales::leap_seconds_at(&jd_a);
+
+    assert_eq!(leap_seconds_a.unwrap(), 37);
+
+    let jd_b = get_jd(2016, 12, 31, 23, 59, 59.999);
+    let leap_seconds_b = timescales::leap_seconds_at(&jd_b);
+
+    assert_eq!(leap_seconds_b.unwrap(), 36);
+}
+
+#[test]
+fn test_tt_at_j2000() {
+    let jd = get_jd(2000, 1, 1, 12, 0, 0.0);
+    let tt = timescales::JdTt::new_from_utc(&jd);
+
+    assert_close(
+        tt.expect("Error converting the Terestrial time").value(),
+        2451545.0 + 64.184 / 86400.0,
+        TOLERANCE,
+    );
+}
+
+#[test]
+fn test_tt_gains_extra_second_across_leap_boundary() {
+    let jd_a = get_jd(2016, 12, 31, 23, 59, 59.0);
+    let tt_a = timescales::JdTt::new_from_utc(&jd_a).expect("Error converting the Terestrial time");
+
+    let jd_b = get_jd(2017, 1, 1, 0, 0, 1.0);
+    let tt_b = timescales::JdTt::new_from_utc(&jd_b).expect("Error converting the Terestrial time");
+
+    let difference_seconds = (tt_b.day() - tt_a.day()) + (tt_b.fraction() - tt_a.fraction());
+
+    assert_close(difference_seconds * 86400.0, 3.0, TOLERANCE);
+}
+
+#[test]
+fn test_tt_before_utc_epoch_errors() {
+    let jd = get_jd(1971, 6, 15, 12, 0, 0.0);
+    let tt = timescales::JdTt::new_from_utc(&jd);
+
+    assert!(matches!(tt, Err(timescales::TimeError::BeforeUtcEpoch)));
+}
+
 fn is_leap_year(year: i32) -> bool {
     (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
