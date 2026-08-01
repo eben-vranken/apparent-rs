@@ -77,6 +77,10 @@ impl JdTt {
     pub fn fraction(&self) -> f64 {
         self.fraction
     }
+
+    pub fn now() -> Result<Self, TimeError> {
+        Self::new_from_utc(&JdUtc::now()?)
+    }
 }
 
 #[derive(Debug)]
@@ -101,6 +105,10 @@ impl JdUt1 {
             day: date.day(),
             fraction: date.fraction() + dut1 / 86400.0,
         }
+    }
+
+    pub fn now(dut1: f64) -> Result<Self, TimeError> {
+        Ok(Self::new_from_utc(&JdUtc::now()?, dut1))
     }
 }
 
