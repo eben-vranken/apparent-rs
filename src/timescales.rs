@@ -43,6 +43,18 @@ impl JdTt {
     pub fn value(&self) -> f64 {
         self.day + self.fraction
     }
+
+    pub fn new_from_utc(date: &CalendarDate) -> Result<Self, TimeError> {
+        let delta_at = leap_seconds_at(date)?;
+        let offset = (f64::from(delta_at) + 32.184) / 86400.0;
+
+        let jd = calendar_date_to_julian_date(date);
+
+        Ok(Self {
+            day: jd.day(),
+            fraction: jd.fraction() + offset,
+        })
+    }
 }
 
 #[derive(Debug)]
@@ -181,7 +193,7 @@ const LEAP_SECONDS_TABLE: &[LeapSecondEntry] = &[
     },
 ];
 
-pub fn total_correction_since(date: &CalendarDate) -> Result<u8, TimeError> {
+pub fn leap_seconds_at(date: &CalendarDate) -> Result<u8, TimeError> {
     if date < &CalendarDate::unwrap_const(CalendarDate::new(1972, 1, 1, 0, 0, 0.0)) {
         return Err(TimeError::BeforeUtcEpoch);
     }

@@ -7,7 +7,7 @@ fn main() {
 
     println!("{}", date_a >= date_b);
 
-    let latest_correction = timescales::total_correction_since(&date_a);
+    let latest_correction = timescales::leap_seconds_at(&date_a);
 
     println!("{:?}", latest_correction);
 }
