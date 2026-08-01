@@ -1,7 +1,21 @@
 use crate::calendar::CalendarDate;
 
 #[derive(Debug)]
-pub struct JdUtc(pub f64);
+pub struct JdUtc {
+    day: f64,
+    fraction: f64,
+}
+
+impl JdUtc {
+    pub fn new(day: f64, fraction: f64) -> Self {
+        Self { day, fraction }
+    }
+
+    pub fn value(&self) -> f64 {
+        self.day + self.fraction
+    }
+}
+
 pub struct JdTt(pub f64);
 pub struct JdUt1(pub f64);
 
@@ -28,5 +42,8 @@ pub fn calendar_date_to_julian_date(date: &CalendarDate) -> JdUtc {
 
     let jdn = calendar_date_to_julian_day_number(date) as f64;
 
-    JdUtc(jdn - 0.5 + (hour * 3600.0 + minute * 60.0 + second) / 86400.0)
+    let day = jdn - 0.5;
+    let fraction = (hour * 3600.0 + minute * 60.0 + second) / 86400.0;
+
+    JdUtc::new(day, fraction)
 }
