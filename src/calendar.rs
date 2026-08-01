@@ -9,7 +9,7 @@ pub enum CalendarError {
 
 /// I made the calendar date private so I can validate fields
 /// i.e. making sure months can't be over 13, hours over 24,...  
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, PartialOrd)]
 pub struct CalendarDate {
     // Date
     year: i32,
@@ -112,61 +112,5 @@ impl CalendarDate {
 
     pub fn second(&self) -> f64 {
         self.second
-    }
-
-    pub fn before(&self, date: &CalendarDate) -> bool {
-        if self.year > date.year() {
-            return false;
-        }
-
-        if self.month > date.month() {
-            return false;
-        }
-
-        if self.day > date.day() {
-            return false;
-        }
-
-        if self.hour > date.hour() {
-            return false;
-        }
-
-        if self.minute > date.minute() {
-            return false;
-        }
-
-        if self.second > date.second() {
-            return false;
-        }
-
-        true
-    }
-
-    pub fn after(&self, date: &CalendarDate) -> bool {
-        if self.year < date.year() {
-            return false;
-        }
-
-        if self.month < date.month() {
-            return false;
-        }
-
-        if self.day < date.day() {
-            return false;
-        }
-
-        if self.hour < date.hour() {
-            return false;
-        }
-
-        if self.minute < date.minute() {
-            return false;
-        }
-
-        if self.second < date.second() {
-            return false;
-        }
-
-        true
     }
 }

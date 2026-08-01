@@ -1,6 +1,11 @@
 use crate::calendar::{CalendarDate, CalendarError};
 
 #[derive(Debug)]
+pub enum TimeError {
+    BeforeUtcEpoch,
+}
+
+#[derive(Debug)]
 pub struct JdUtc {
     day: f64,
     fraction: f64,
@@ -175,6 +180,22 @@ const LEAP_SECONDS_TABLE: &[LeapSecondEntry] = &[
         total_correction: 37,
     },
 ];
+
+pub fn total_correction_since(date: &CalendarDate) -> Result<u8, TimeError> {
+    if date < &CalendarDate::unwrap_const(CalendarDate::new(1972, 1, 1, 0, 0, 0.0)) {
+        return Err(TimeError::BeforeUtcEpoch);
+    }
+
+    let mut latest_correction = 0;
+
+    for entry in LEAP_SECONDS_TABLE {
+        if &entry.insert_date <= date {
+            latest_correction = entry.total_correction;
+        }
+    }
+
+    Ok(latest_correction)
+}
 
 pub fn calendar_date_to_julian_day_number(date: &CalendarDate) -> i32 {
     let year = date.year();
