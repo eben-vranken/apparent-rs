@@ -1,5 +1,5 @@
 #[derive(Debug, PartialEq)]
-pub enum UserError {
+pub enum CalendarError {
     InvalidMonth,
     InvalidDay,
     InvalidHour,
@@ -7,6 +7,8 @@ pub enum UserError {
     InvalidSecond,
 }
 
+/// I made the calendar date private so I can validate fields
+/// i.e. making sure months can't be over 13, hours over 24,...  
 #[derive(Debug, PartialEq)]
 pub struct CalendarDate {
     // Date
@@ -20,14 +22,12 @@ pub struct CalendarDate {
     second: f64,
 }
 
-/// I made the calendar date private so I can validate fields
-/// i.e. making sure months can't be over 13, hours over 24,...  
 impl CalendarDate {
-    pub fn is_leap_year(year: i32) -> bool {
+    const fn is_leap_year(year: i32) -> bool {
         (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
-    pub fn days_in_month(month: u8, year: i32) -> Option<u8> {
+    const fn days_in_month(year: i32, month: u8) -> Option<u8> {
         match month {
             1 | 3 | 5 | 7 | 8 | 10 | 12 => Some(31),
             4 | 6 | 9 | 11 => Some(30),
@@ -50,23 +50,23 @@ impl CalendarDate {
         hour: u8,
         minute: u8,
         second: f64,
-    ) -> Result<Self, UserError> {
-        let max_days = Self::days_in_month(month, year).ok_or(UserError::InvalidMonth)?;
+    ) -> Result<Self, CalendarError> {
+        let max_days = Self::days_in_month(year, month).ok_or(CalendarError::InvalidMonth)?;
 
         if day < 1 || day > max_days {
-            return Err(UserError::InvalidDay);
+            return Err(CalendarError::InvalidDay);
         }
 
         if hour > 23 {
-            return Err(UserError::InvalidHour);
+            return Err(CalendarError::InvalidHour);
         }
 
         if minute > 59 {
-            return Err(UserError::InvalidMinute);
+            return Err(CalendarError::InvalidMinute);
         }
 
-        if second.is_nan() || second < 0.0 || second > 60.0 {
-            return Err(UserError::InvalidSecond);
+        if second.is_nan() || second < 0.0 || second >= 61.0 {
+            return Err(CalendarError::InvalidSecond);
         }
 
         Ok(Self {

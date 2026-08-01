@@ -1,4 +1,4 @@
-use apparent_rs::calendar::{CalendarDate, UserError};
+use apparent_rs::calendar::{CalendarDate, CalendarError};
 
 #[test]
 fn test_valid_date() {
@@ -9,31 +9,31 @@ fn test_valid_date() {
 #[test]
 fn test_invalid_month_upper_bound() {
     let date = CalendarDate::new(2002, 13, 15, 12, 30, 0.0);
-    assert_eq!(date, Err(UserError::InvalidMonth))
+    assert_eq!(date, Err(CalendarError::InvalidMonth))
 }
 
 #[test]
 fn test_invalid_month_lower_bound() {
     let date = CalendarDate::new(2002, 0, 15, 12, 30, 0.0);
-    assert_eq!(date, Err(UserError::InvalidMonth))
+    assert_eq!(date, Err(CalendarError::InvalidMonth))
 }
 
 #[test]
 fn test_invalid_day_upper_bound() {
     let date = CalendarDate::new(2002, 12, 32, 12, 30, 0.0);
-    assert_eq!(date, Err(UserError::InvalidDay))
+    assert_eq!(date, Err(CalendarError::InvalidDay))
 }
 
 #[test]
 fn test_invalid_day_lower_bound() {
     let date = CalendarDate::new(2002, 12, 0, 12, 30, 0.0);
-    assert_eq!(date, Err(UserError::InvalidDay))
+    assert_eq!(date, Err(CalendarError::InvalidDay))
 }
 
 #[test]
 fn test_invalid_leap_year() {
     let date = CalendarDate::new(2002, 02, 29, 12, 30, 0.0);
-    assert_eq!(date, Err(UserError::InvalidDay))
+    assert_eq!(date, Err(CalendarError::InvalidDay))
 }
 
 #[test]
@@ -45,7 +45,7 @@ fn test_valid_leap_year() {
 #[test]
 fn test_in_valid_century_leap_year() {
     let date = CalendarDate::new(1900, 02, 29, 12, 30, 0.0);
-    assert_eq!(date, Err(UserError::InvalidDay))
+    assert_eq!(date, Err(CalendarError::InvalidDay))
 }
 
 #[test]
@@ -84,7 +84,7 @@ fn test_all_months_day_limits() {
         let invalid = CalendarDate::new(non_leap_year, month, max_day + 1, 0, 0, 0.0);
         assert_eq!(
             invalid,
-            Err(UserError::InvalidDay),
+            Err(CalendarError::InvalidDay),
             "Expected month {}, day {} to fail",
             month,
             max_day + 1
@@ -95,31 +95,31 @@ fn test_all_months_day_limits() {
 #[test]
 fn test_invalid_hour() {
     let date = CalendarDate::new(2002, 12, 15, 24, 30, 0.0);
-    assert_eq!(date, Err(UserError::InvalidHour))
+    assert_eq!(date, Err(CalendarError::InvalidHour))
 }
 
 #[test]
 fn test_invalid_minute() {
     let date = CalendarDate::new(2002, 12, 15, 12, 60, 0.0);
-    assert_eq!(date, Err(UserError::InvalidMinute))
+    assert_eq!(date, Err(CalendarError::InvalidMinute))
 }
 
 #[test]
 fn test_invalid_second() {
     let date = CalendarDate::new(2002, 12, 15, 12, 30, 61.0);
-    assert_eq!(date, Err(UserError::InvalidSecond))
+    assert_eq!(date, Err(CalendarError::InvalidSecond))
 }
 
 #[test]
 fn test_nan_second_not_accepted() {
     let date = CalendarDate::new(2002, 12, 15, 12, 30, f64::NAN);
-    assert_eq!(date, Err(UserError::InvalidSecond))
+    assert_eq!(date, Err(CalendarError::InvalidSecond))
 }
 
 #[test]
 fn test_negative_second_not_accepted() {
     let date = CalendarDate::new(2002, 12, 15, 12, 30, -1.0);
-    assert_eq!(date, Err(UserError::InvalidSecond))
+    assert_eq!(date, Err(CalendarError::InvalidSecond))
 }
 
 #[test]
