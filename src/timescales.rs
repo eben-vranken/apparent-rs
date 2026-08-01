@@ -1,4 +1,5 @@
 use crate::calendar::{CalendarDate, CalendarError};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 #[derive(Debug)]
 pub enum TimeError {
@@ -26,6 +27,21 @@ impl JdUtc {
 
     pub fn fraction(&self) -> f64 {
         self.fraction
+    }
+
+    pub fn now() -> Result<Self, TimeError> {
+        let since_epoch = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map_err(|_| TimeError::BeforeUtcEpoch)?;
+
+        let secs = since_epoch.as_secs();
+        let days = (secs / 86400) as f64;
+        let secs_of_day = (secs % 86400) as f64 + f64::from(since_epoch.subsec_nanos()) * 1e-9;
+
+        Ok(Self {
+            day: 2440587.5 + days,
+            fraction: secs_of_day / 86400.0,
+        })
     }
 }
 
