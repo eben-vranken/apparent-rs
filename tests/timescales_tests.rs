@@ -63,6 +63,14 @@ fn test_sub_second_precision() {
     assert_close(jd.value(), 2451544.4999999884, TOLERANCE)
 }
 
+#[test]
+fn test_utc_to_julian_date_roundtrip() {
+    let date = calendar::CalendarDate::new(2002, 12, 15, 12, 00, 0.0).expect("Not a valid date!");
+    let jd = timescales::calendar_date_to_julian_date(&date);
+    let round_trip_date = timescales::julian_date_to_calendar_date(&jd).expect("Not a valid date!");
+    assert_eq!(date, round_trip_date);
+}
+
 fn get_jd(year: i32, month: u8, day: u8, hour: u8, minute: u8, second: f64) -> timescales::JdUtc {
     let date = calendar::CalendarDate::new(year, month, day, hour, minute, second)
         .expect("Not a valid date");
