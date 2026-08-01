@@ -81,6 +81,10 @@ impl JdTt {
     pub fn now() -> Result<Self, TimeError> {
         Self::new_from_utc(&JdUtc::now()?)
     }
+
+    pub fn julian_centuries_since_j2000(&self) -> f64 {
+        (self.day - 2451545.0 + self.fraction) / 36525.0
+    }
 }
 
 #[derive(Debug)]
