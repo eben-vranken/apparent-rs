@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum UserError {
     InvalidMonth,
     InvalidDay,
@@ -7,7 +7,7 @@ pub enum UserError {
     InvalidSecond,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct CalendarDate {
     // Date
     year: i32,
