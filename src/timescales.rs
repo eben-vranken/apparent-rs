@@ -56,6 +56,126 @@ impl JdUt1 {
     }
 }
 
+pub struct LeapSecondEntry {
+    pub insert_date: CalendarDate,
+    pub total_correction: u8,
+}
+
+const LEAP_SECONDS_TABLE: &[LeapSecondEntry] = &[
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1972, 1, 1, 0, 0, 0.0)),
+        total_correction: 10,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1972, 7, 1, 0, 0, 0.0)),
+        total_correction: 11,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1973, 1, 1, 0, 0, 0.0)),
+        total_correction: 12,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1974, 1, 1, 0, 0, 0.0)),
+        total_correction: 13,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1975, 1, 1, 0, 0, 0.0)),
+        total_correction: 14,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1976, 1, 1, 0, 0, 0.0)),
+        total_correction: 15,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1977, 1, 1, 0, 0, 0.0)),
+        total_correction: 16,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1978, 1, 1, 0, 0, 0.0)),
+        total_correction: 17,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1979, 1, 1, 0, 0, 0.0)),
+        total_correction: 18,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1980, 1, 1, 0, 0, 0.0)),
+        total_correction: 19,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1981, 7, 1, 0, 0, 0.0)),
+        total_correction: 20,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1982, 7, 1, 0, 0, 0.0)),
+        total_correction: 21,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1983, 7, 1, 0, 0, 0.0)),
+        total_correction: 22,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1985, 7, 1, 0, 0, 0.0)),
+        total_correction: 23,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1988, 1, 1, 0, 0, 0.0)),
+        total_correction: 24,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1990, 1, 1, 0, 0, 0.0)),
+        total_correction: 25,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1991, 1, 1, 0, 0, 0.0)),
+        total_correction: 26,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1992, 7, 1, 0, 0, 0.0)),
+        total_correction: 27,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1993, 7, 1, 0, 0, 0.0)),
+        total_correction: 28,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1994, 7, 1, 0, 0, 0.0)),
+        total_correction: 29,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1996, 1, 1, 0, 0, 0.0)),
+        total_correction: 30,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1997, 7, 1, 0, 0, 0.0)),
+        total_correction: 31,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(1999, 1, 1, 0, 0, 0.0)),
+        total_correction: 32,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(2006, 1, 1, 0, 0, 0.0)),
+        total_correction: 33,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(2009, 1, 1, 0, 0, 0.0)),
+        total_correction: 34,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(2012, 7, 1, 0, 0, 0.0)),
+        total_correction: 35,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(2015, 7, 1, 0, 0, 0.0)),
+        total_correction: 36,
+    },
+    LeapSecondEntry {
+        insert_date: CalendarDate::unwrap_const(CalendarDate::new(2017, 1, 1, 0, 0, 0.0)),
+        total_correction: 37,
+    },
+];
+
 pub fn calendar_date_to_julian_day_number(date: &CalendarDate) -> i32 {
     let year = date.year();
     let month = i32::from(date.month());

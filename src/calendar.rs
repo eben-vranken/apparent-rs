@@ -42,8 +42,15 @@ impl CalendarDate {
         }
     }
 
+    pub const fn unwrap_const(result: Result<Self, CalendarError>) -> Self {
+        match result {
+            Ok(date) => date,
+            Err(_) => panic!("invalid CalendarDate literal"),
+        }
+    }
+
     // Setter
-    pub fn new(
+    pub const fn new(
         year: i32,
         month: u8,
         day: u8,
@@ -51,7 +58,10 @@ impl CalendarDate {
         minute: u8,
         second: f64,
     ) -> Result<Self, CalendarError> {
-        let max_days = Self::days_in_month(year, month).ok_or(CalendarError::InvalidMonth)?;
+        let max_days = match Self::days_in_month(year, month) {
+            Some(days) => days,
+            None => return Err(CalendarError::InvalidMonth),
+        };
 
         if day < 1 || day > max_days {
             return Err(CalendarError::InvalidDay);
