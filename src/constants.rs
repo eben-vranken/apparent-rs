@@ -28,4 +28,4 @@ pub const PI: f64 = std::f64::consts::PI;
 pub const RADIANS_PER_DEGREE: f64 = std::f64::consts::PI / 180.0;
 pub const RADIANS_PER_HOUR: f64 = 15.0 * RADIANS_PER_DEGREE;
 pub const RADIANS_PER_ARCSECOND: f64 = std::f64::consts::PI / 648_000.0;
-pub const RADIANS_PER_ARCMILLISECOND: f64 = std::f64::consts::PI / 648_000_000.0;
+pub const RADIANS_PER_MILLIARCSECOND: f64 = std::f64::consts::PI / 648_000_000.0;

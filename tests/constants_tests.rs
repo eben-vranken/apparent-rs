@@ -22,8 +22,8 @@ fn test_radians_per_arcsecond() {
 }
 
 #[test]
-fn test_radians_per_arcmillisecond() {
-    let milliarcseconds_per_turn: f64 = constants::TAU / constants::RADIANS_PER_ARCMILLISECOND;
+fn test_RADIANS_PER_MILLIARCSECOND() {
+    let milliarcseconds_per_turn: f64 = constants::TAU / constants::RADIANS_PER_MILLIARCSECOND;
 
     assert_eq!(milliarcseconds_per_turn, 1296000000.0);
 }
