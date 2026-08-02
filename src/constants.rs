@@ -21,3 +21,11 @@ pub const TT_MINUS_TAI_SECONDS: f64 = 32.184;
 
 // Calendar Validation
 pub const MAX_SECONDS_OF_MINUTE: f64 = 61.0; // Allows for 60.x for leap seconds
+
+// Angles
+pub const TAU: f64 = std::f64::consts::TAU;
+pub const PI: f64 = std::f64::consts::PI;
+pub const RADIANS_PER_DEGREE: f64 = std::f64::consts::PI / 180.0;
+pub const RADIANS_PER_HOUR: f64 = 15.0 * RADIANS_PER_DEGREE;
+pub const RADIANS_PER_ARCSECOND: f64 = std::f64::consts::PI / 648_000.0;
+pub const RADIANS_PER_ARCMILLISECOND: f64 = std::f64::consts::PI / 648_000_000.0;
