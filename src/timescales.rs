@@ -43,6 +43,11 @@ impl JdUtc {
             fraction: secs_of_day / 86400.0,
         })
     }
+
+    pub fn from_calendar(date: &CalendarDate) -> Self {
+        let (day, fraction) = calendar_to_two_part(date);
+        Self { day, fraction }
+    }
 }
 
 #[derive(Debug)]
@@ -84,6 +89,11 @@ impl JdTt {
 
     pub fn julian_centuries_since_j2000(&self) -> f64 {
         (self.day - 2451545.0 + self.fraction) / 36525.0
+    }
+
+    pub fn from_calendar(date: &CalendarDate) -> Self {
+        let (day, fraction) = calendar_to_two_part(date);
+        Self { day, fraction }
     }
 }
 
@@ -264,7 +274,7 @@ pub fn calendar_date_to_julian_day_number(date: &CalendarDate) -> i32 {
         - (3 * ((a_year + 4900) / 100) / 4)
 }
 
-pub fn calendar_date_to_julian_date(date: &CalendarDate) -> JdUtc {
+fn calendar_to_two_part(date: &CalendarDate) -> (f64, f64) {
     let hour = f64::from(date.hour());
     let minute = f64::from(date.minute());
     let second = date.second();
@@ -274,7 +284,7 @@ pub fn calendar_date_to_julian_date(date: &CalendarDate) -> JdUtc {
     let day = jdn - 0.5;
     let fraction = (hour * 3600.0 + minute * 60.0 + second) / 86400.0;
 
-    JdUtc::new(day, fraction)
+    (day, fraction)
 }
 
 pub fn julian_date_to_calendar_date(date: &JdUtc) -> Result<CalendarDate, CalendarError> {
