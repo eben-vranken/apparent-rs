@@ -144,6 +144,8 @@ pub struct LeapSecondEntry {
     pub total_correction: u8,
 }
 
+/// DUT1 = UT1 − UTC, seconds.
+/// Source: IERS, https://data.iana.org/time-zones/data/leap-seconds.list, retrieved 2nd of August 2026.
 const LEAP_SECONDS_TABLE: &[LeapSecondEntry] = &[
     LeapSecondEntry {
         insert_date: 2441317.5,
