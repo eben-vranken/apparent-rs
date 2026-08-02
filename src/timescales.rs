@@ -287,13 +287,16 @@ fn calendar_to_two_part(date: &CalendarDate) -> (f64, f64) {
     (day, fraction)
 }
 
-pub fn julian_date_to_calendar_date(date: &JdUtc) -> Result<CalendarDate, CalendarError> {
-    let shifted = date.day() + 0.5;
+pub fn julian_date_to_calendar_date(
+    day: f64,
+    fraction: f64,
+) -> Result<CalendarDate, CalendarError> {
+    let shifted = day + 0.5;
 
     // Seperate days and time
     let z0 = shifted.floor();
     let r = shifted - z0;
-    let combined = r + date.fraction();
+    let combined = r + fraction;
     let carry = combined.floor();
     let mut z = z0 + carry;
     let f = combined - carry;
