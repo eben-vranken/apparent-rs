@@ -1,4 +1,8 @@
 use crate::calendar::{CalendarDate, CalendarError};
+use crate::constants::{
+    DAYS_PER_JULIAN_CENTURY, J2000_EPOCH_JD, NANOS_PER_SECOND, SECONDS_PER_DAY,
+    SECONDS_PER_DAY_INT, SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TT_MINUS_TAI_SECONDS, UNIX_EPOCH_JD,
+};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 #[derive(Debug)]
@@ -35,12 +39,13 @@ impl JdUtc {
             .map_err(|_| TimeError::BeforeUtcEpoch)?;
 
         let secs = since_epoch.as_secs();
-        let days = (secs / 86400) as f64;
-        let secs_of_day = (secs % 86400) as f64 + f64::from(since_epoch.subsec_nanos()) * 1e-9;
+        let days = (secs / SECONDS_PER_DAY_INT) as f64;
+        let secs_of_day = (secs % SECONDS_PER_DAY_INT) as f64
+            + f64::from(since_epoch.subsec_nanos()) * NANOS_PER_SECOND;
 
         Ok(Self {
-            day: 2440587.5 + days,
-            fraction: secs_of_day / 86400.0,
+            day: UNIX_EPOCH_JD + days,
+            fraction: secs_of_day / SECONDS_PER_DAY,
         })
     }
 
@@ -71,7 +76,7 @@ impl JdTt {
 
     pub fn from_utc(date: &JdUtc) -> Result<Self, TimeError> {
         let delta_at = leap_seconds_at(date)?;
-        let offset = (f64::from(delta_at) + 32.184) / 86400.0;
+        let offset = (f64::from(delta_at) + TT_MINUS_TAI_SECONDS) / SECONDS_PER_DAY;
 
         Ok(Self {
             day: date.day(),
@@ -92,7 +97,7 @@ impl JdTt {
     }
 
     pub fn julian_centuries_since_j2000(&self) -> f64 {
-        (self.day - 2451545.0 + self.fraction) / 36525.0
+        (self.day - J2000_EPOCH_JD + self.fraction) / DAYS_PER_JULIAN_CENTURY
     }
 
     pub fn from_calendar(date: &CalendarDate) -> Self {
@@ -133,7 +138,7 @@ impl JdUt1 {
     pub fn from_utc(date: &JdUtc, dut1: f64) -> Self {
         Self {
             day: date.day(),
-            fraction: date.fraction() + dut1 / 86400.0,
+            fraction: date.fraction() + dut1 / SECONDS_PER_DAY,
         }
     }
 
@@ -308,7 +313,7 @@ fn calendar_to_two_part(date: &CalendarDate) -> (f64, f64) {
     let jdn = calendar_date_to_julian_day_number(date) as f64;
 
     let day = jdn - 0.5;
-    let fraction = (hour * 3600.0 + minute * 60.0 + second) / 86400.0;
+    let fraction = (hour * SECONDS_PER_HOUR + minute * SECONDS_PER_MINUTE + second) / SECONDS_PER_DAY;
 
     (day, fraction)
 }
@@ -325,9 +330,9 @@ fn two_part_to_calendar_date(day: &f64, fraction: &f64) -> Result<CalendarDate, 
     let f = combined - carry;
 
     // Get time
-    let mut total_seconds = f * 86400.0;
-    total_seconds = (total_seconds * 1e9).round() / 1e9;
-    if total_seconds == 86400.0 {
+    let mut total_seconds = f * SECONDS_PER_DAY;
+    total_seconds = (total_seconds * NANOS_PER_SECOND).round() / NANOS_PER_SECOND;
+    if total_seconds == SECONDS_PER_DAY {
         total_seconds = 0.0;
         z += 1.0;
     }
