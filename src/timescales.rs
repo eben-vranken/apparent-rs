@@ -112,6 +112,14 @@ impl JdUt1 {
         self.day + self.fraction
     }
 
+    pub fn day(&self) -> f64 {
+        self.day
+    }
+
+    pub fn fraction(&self) -> f64 {
+        self.fraction
+    }
+
     /// DUT1 = UT1 − UTC, seconds.
     /// Source: IERS Bulletin A, https://datacenter.iers.org/data/latestVersion/bulletinA.txt, retrieved 2nd of August 2026.
     pub fn new_from_utc(date: &JdUtc, dut1: f64) -> Self {
@@ -123,6 +131,11 @@ impl JdUt1 {
 
     pub fn now(dut1: f64) -> Result<Self, TimeError> {
         Ok(Self::new_from_utc(&JdUtc::now()?, dut1))
+    }
+
+    pub fn from_calendar(date: &CalendarDate) -> Self {
+        let (day, fraction) = calendar_to_two_part(date);
+        Self { day, fraction }
     }
 }
 
