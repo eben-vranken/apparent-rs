@@ -82,7 +82,7 @@ fn test_utc_to_julian_date_roundtrip() {
                 for (i, t) in times.iter().enumerate() {
                     let date = calendar::CalendarDate::new(y, m, d, t.0, t.1, t.2)
                         .expect("Not a valid date!");
-                    let jd = timescales::calendar_date_to_julian_date(&date);
+                    let jd = timescales::JdUtc::from_calendar(&date);
                     let round_trip_date =
                         timescales::julian_date_to_calendar_date(&jd).expect("Not a valid date!");
                     assert_eq!(
@@ -142,6 +142,21 @@ fn test_tt_before_utc_epoch_errors() {
     assert!(matches!(tt, Err(timescales::TimeError::BeforeUtcEpoch)));
 }
 
+#[test]
+fn test_julian_centuries_at_j2000() {
+    let tt = timescales::JdTt::from_calendar(
+        &calendar::CalendarDate::new(2000, 1, 1, 12, 0, 0.0).unwrap(),
+    );
+
+    let julian_centuries = tt.julian_centuries_since_j2000();
+
+    assert_eq!(
+        julian_centuries, 0.0,
+        "Expected {} julian centuries, but got {}",
+        0.0, julian_centuries
+    );
+}
+
 fn is_leap_year(year: i32) -> bool {
     (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
@@ -164,7 +179,7 @@ fn days_in_month(year: i32, month: u8) -> Option<u8> {
 fn get_jd(year: i32, month: u8, day: u8, hour: u8, minute: u8, second: f64) -> timescales::JdUtc {
     let date = calendar::CalendarDate::new(year, month, day, hour, minute, second)
         .expect("Not a valid date");
-    timescales::calendar_date_to_julian_date(&date)
+    timescales::JdUtc::from_calendar(&date)
 }
 
 #[track_caller]
