@@ -99,6 +99,10 @@ impl JdTt {
         let (day, fraction) = calendar_to_two_part(date);
         Self { day, fraction }
     }
+
+    pub fn to_calendar(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
+        two_part_to_calendar_date(&day, &fraction)
+    }
 }
 
 #[derive(Debug)]
@@ -140,6 +144,10 @@ impl JdUt1 {
     pub fn from_calendar(date: &CalendarDate) -> Self {
         let (day, fraction) = calendar_to_two_part(date);
         Self { day, fraction }
+    }
+
+    pub fn to_calendar(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
+        two_part_to_calendar_date(&day, &fraction)
     }
 }
 
