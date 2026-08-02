@@ -1,4 +1,4 @@
-/// Hard wired constants that never change, per definition
+//! Hard wired constants that never change, per definition
 // Time units
 pub const SECONDS_PER_MINUTE: f64 = 60.0;
 pub const SECONDS_PER_HOUR: f64 = 3_600.0;
