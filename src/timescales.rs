@@ -300,10 +300,7 @@ fn calendar_to_two_part(date: &CalendarDate) -> (f64, f64) {
     (day, fraction)
 }
 
-pub fn julian_date_to_calendar_date(
-    day: f64,
-    fraction: f64,
-) -> Result<CalendarDate, CalendarError> {
+pub fn two_part_to_calendar_date(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
     let shifted = day + 0.5;
 
     // Seperate days and time
