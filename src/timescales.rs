@@ -65,7 +65,7 @@ impl JdTt {
         self.day + self.fraction
     }
 
-    pub fn new_from_utc(date: &JdUtc) -> Result<Self, TimeError> {
+    pub fn from_utc(date: &JdUtc) -> Result<Self, TimeError> {
         let delta_at = leap_seconds_at(date)?;
         let offset = (f64::from(delta_at) + 32.184) / 86400.0;
 
@@ -84,7 +84,7 @@ impl JdTt {
     }
 
     pub fn now() -> Result<Self, TimeError> {
-        Self::new_from_utc(&JdUtc::now()?)
+        Self::from_utc(&JdUtc::now()?)
     }
 
     pub fn julian_centuries_since_j2000(&self) -> f64 {
