@@ -41,7 +41,7 @@ impl JdUtc {
         let secs = since_epoch.as_secs();
         let days = (secs / SECONDS_PER_DAY_INT) as f64;
         let secs_of_day = (secs % SECONDS_PER_DAY_INT) as f64
-            + f64::from(since_epoch.subsec_nanos()) * NANOS_PER_SECOND;
+            + f64::from(since_epoch.subsec_nanos()) / NANOS_PER_SECOND;
 
         Ok(Self {
             day: UNIX_EPOCH_JD + days,
@@ -54,8 +54,8 @@ impl JdUtc {
         Self { day, fraction }
     }
 
-    pub fn to_calendar(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
-        two_part_to_calendar_date(&day, &fraction)
+    pub fn to_calendar(&self) -> Result<CalendarDate, CalendarError> {
+        two_part_to_calendar_date(self.day, self.fraction)
     }
 }
 
@@ -105,8 +105,8 @@ impl JdTt {
         Self { day, fraction }
     }
 
-    pub fn to_calendar(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
-        two_part_to_calendar_date(&day, &fraction)
+    pub fn to_calendar(&self) -> Result<CalendarDate, CalendarError> {
+        two_part_to_calendar_date(self.day, self.fraction)
     }
 }
 
@@ -151,8 +151,8 @@ impl JdUt1 {
         Self { day, fraction }
     }
 
-    pub fn to_calendar(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
-        two_part_to_calendar_date(&day, &fraction)
+    pub fn to_calendar(&self) -> Result<CalendarDate, CalendarError> {
+        two_part_to_calendar_date(self.day, self.fraction)
     }
 }
 
@@ -278,12 +278,13 @@ const LEAP_SECONDS_TABLE: &[LeapSecondEntry] = &[
 ];
 
 pub fn leap_seconds_at(date: &JdUtc) -> Result<u8, TimeError> {
+    let jd = date.value();
+
     // Keep guard or index can be below 0
-    if date.value() < 2441317.5 {
+    if jd < LEAP_SECONDS_TABLE[0].insert_date {
         return Err(TimeError::BeforeUtcEpoch);
     }
 
-    let jd = date.value();
     let index = LEAP_SECONDS_TABLE.partition_point(|e| e.insert_date <= jd);
 
     Ok(LEAP_SECONDS_TABLE[index - 1].total_correction)
@@ -313,12 +314,13 @@ fn calendar_to_two_part(date: &CalendarDate) -> (f64, f64) {
     let jdn = calendar_date_to_julian_day_number(date) as f64;
 
     let day = jdn - 0.5;
-    let fraction = (hour * SECONDS_PER_HOUR + minute * SECONDS_PER_MINUTE + second) / SECONDS_PER_DAY;
+    let fraction =
+        (hour * SECONDS_PER_HOUR + minute * SECONDS_PER_MINUTE + second) / SECONDS_PER_DAY;
 
     (day, fraction)
 }
 
-fn two_part_to_calendar_date(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
+fn two_part_to_calendar_date(day: f64, fraction: f64) -> Result<CalendarDate, CalendarError> {
     let shifted = day + 0.5;
 
     // Seperate days and time

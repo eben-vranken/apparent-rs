@@ -1,3 +1,7 @@
+use crate::constants::{
+    MAX_SECONDS_OF_MINUTE, NANOS_PER_SECOND, SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE,
+};
+
 #[derive(Debug, PartialEq)]
 pub enum CalendarError {
     InvalidMonth,
@@ -75,7 +79,7 @@ impl CalendarDate {
             return Err(CalendarError::InvalidMinute);
         }
 
-        if second.is_nan() || second < 0.0 || second >= 61.0 {
+        if second.is_nan() || second < 0.0 || second >= MAX_SECONDS_OF_MINUTE {
             return Err(CalendarError::InvalidSecond);
         }
 
@@ -119,14 +123,16 @@ impl CalendarDate {
             return Err(CalendarError::InvalidSecond);
         }
 
-        let seconds_of_day =
-            f64::from(self.hour) * 3600.0 + f64::from(self.minute) * 60.0 + self.second + seconds;
+        let seconds_of_day = f64::from(self.hour) * SECONDS_PER_HOUR
+            + f64::from(self.minute) * SECONDS_PER_MINUTE
+            + self.second
+            + seconds;
 
-        let mut day_offset = (seconds_of_day / 86400.0).floor();
-        let mut remainder = seconds_of_day - day_offset * 86400.0;
+        let mut day_offset = (seconds_of_day / SECONDS_PER_DAY).floor();
+        let mut remainder = seconds_of_day - day_offset * SECONDS_PER_DAY;
 
-        remainder = (remainder * 1e9).round() / 1e9;
-        if remainder >= 86400.0 {
+        remainder = (remainder * NANOS_PER_SECOND).round() / NANOS_PER_SECOND;
+        if remainder >= SECONDS_PER_DAY {
             day_offset += 1.0;
             remainder = 0.0;
         }

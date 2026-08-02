@@ -79,12 +79,11 @@ fn test_utc_to_julian_date_roundtrip() {
                 .ok_or(calendar::CalendarError::InvalidMonth)
                 .expect("Invalid Month")
             {
-                for (i, t) in times.iter().enumerate() {
+                for t in times.iter() {
                     let date = calendar::CalendarDate::new(y, m, d, t.0, t.1, t.2)
                         .expect("Not a valid date!");
                     let jd = timescales::JdUtc::from_calendar(&date);
-                    let round_trip_date = timescales::JdUtc::to_calendar(&jd.day(), &jd.fraction())
-                        .expect("Not a valid date!");
+                    let round_trip_date = jd.to_calendar().expect("Not a valid date!");
                     assert_eq!(
                         date, round_trip_date,
                         "Expected {:?} found {:?}",
