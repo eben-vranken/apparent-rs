@@ -12,7 +12,7 @@ pub enum CalendarError {
 }
 
 /// I made the calendar date private so I can validate fields
-/// i.e. making sure months can't be over 13, hours over 24,...  
+/// i.e. making sure months can't be over 12, hours over 24,...  
 #[derive(Debug, PartialEq, PartialOrd)]
 pub struct CalendarDate {
     // Date
