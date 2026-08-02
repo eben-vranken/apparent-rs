@@ -83,9 +83,8 @@ fn test_utc_to_julian_date_roundtrip() {
                     let date = calendar::CalendarDate::new(y, m, d, t.0, t.1, t.2)
                         .expect("Not a valid date!");
                     let jd = timescales::JdUtc::from_calendar(&date);
-                    let round_trip_date =
-                        timescales::two_part_to_calendar_date(&jd.day(), &jd.fraction())
-                            .expect("Not a valid date!");
+                    let round_trip_date = timescales::JdUtc::to_calendar(&jd.day(), &jd.fraction())
+                        .expect("Not a valid date!");
                     assert_eq!(
                         date, round_trip_date,
                         "Expected {:?} found {:?}",

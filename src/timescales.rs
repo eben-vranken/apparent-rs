@@ -48,6 +48,10 @@ impl JdUtc {
         let (day, fraction) = calendar_to_two_part(date);
         Self { day, fraction }
     }
+
+    pub fn to_calendar(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
+        two_part_to_calendar_date(&day, &fraction)
+    }
 }
 
 #[derive(Debug)]
@@ -122,7 +126,7 @@ impl JdUt1 {
 
     /// DUT1 = UT1 − UTC, seconds.
     /// Source: IERS Bulletin A, https://datacenter.iers.org/data/latestVersion/bulletinA.txt, retrieved 2nd of August 2026.
-    pub fn new_from_utc(date: &JdUtc, dut1: f64) -> Self {
+    pub fn from_utc(date: &JdUtc, dut1: f64) -> Self {
         Self {
             day: date.day(),
             fraction: date.fraction() + dut1 / 86400.0,
@@ -130,7 +134,7 @@ impl JdUt1 {
     }
 
     pub fn now(dut1: f64) -> Result<Self, TimeError> {
-        Ok(Self::new_from_utc(&JdUtc::now()?, dut1))
+        Ok(Self::from_utc(&JdUtc::now()?, dut1))
     }
 
     pub fn from_calendar(date: &CalendarDate) -> Self {
@@ -144,7 +148,6 @@ pub struct LeapSecondEntry {
     pub total_correction: u8,
 }
 
-/// DUT1 = UT1 − UTC, seconds.
 /// Source: IERS, https://data.iana.org/time-zones/data/leap-seconds.list, retrieved 2nd of August 2026.
 const LEAP_SECONDS_TABLE: &[LeapSecondEntry] = &[
     LeapSecondEntry {
@@ -302,7 +305,7 @@ fn calendar_to_two_part(date: &CalendarDate) -> (f64, f64) {
     (day, fraction)
 }
 
-pub fn two_part_to_calendar_date(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
+fn two_part_to_calendar_date(day: &f64, fraction: &f64) -> Result<CalendarDate, CalendarError> {
     let shifted = day + 0.5;
 
     // Seperate days and time
