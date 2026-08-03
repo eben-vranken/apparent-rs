@@ -21,3 +21,4 @@ Same kind of silent bug as passive vs active, and just as easy to get backwards.
 1. **z** points at the north celestial pole
 2. **x** points where the celestial equator crosses RA 0, the equinox direction
 3. **y** completes a right-handed set: RA 90° on the equator
+point right-hand fingers along x, curl toward y, thumb points along z
