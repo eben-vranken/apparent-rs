@@ -21,6 +21,16 @@ impl Vec3 {
     pub fn length_squared(self) -> f64 {
         self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
     }
+
+    pub fn normalize(self) -> Vec3 {
+        let len: f64 = self.length();
+
+        Self {
+            x: self.x / len,
+            y: self.y / len,
+            z: self.z / len,
+        }
+    }
 }
 
 impl Add for Vec3 {
