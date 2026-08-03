@@ -27,7 +27,7 @@ fn test_length_of_zero_vector() {
 }
 
 #[test]
-fn test_length_of_squared_skkips_the_root() {
+fn test_length_of_squared_skips_the_root() {
     let len = Vec3::new(3.0, 4.0, 0.0).length_squared();
 
     assert_eq!(len, 25.0);
@@ -134,7 +134,7 @@ fn test_dot_general_vectors() {
 }
 
 #[test]
-fn test_dot_is_cone_of_angle() {
+fn test_dot_is_cosine_of_angle() {
     let vec = Vec3::new(1.0, 1.0, 0.0);
     let dot = vec.normalize().dot(Vec3::X);
 
