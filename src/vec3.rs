@@ -13,6 +13,12 @@ impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Self { x: x, y: y, z: z }
     }
+
+    pub fn length(&self) -> f64 {
+        let sum: f64 = &self.x.powi(2) + &self.y.powi(2) + &self.z.powi(2);
+
+        sum.sqrt()
+    }
 }
 
 impl Add for Vec3 {
