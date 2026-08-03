@@ -3,7 +3,7 @@ mod common;
 use apparent_rs::vec3::Vec3;
 use common::{assert_close, assert_close_vector};
 
-pub const TOLERANCE: f64 = 1e-9;
+pub const TOLERANCE: f64 = 1e-12;
 
 #[test]
 fn test_length_of_unit_x() {
