@@ -18,8 +18,6 @@ pub fn assert_close_vector(actual: Vec3, expected: Vec3, tolerance: f64) {
     let diff_z = (actual.z - expected.z).abs();
     assert!(
         diff_x <= tolerance && diff_y <= tolerance && diff_z <= tolerance,
-        "expected {:?}, got {:?} (diff x:{diff_x} y:{diff_y} z:{diff_z}, tolerance {tolerance})",
-        expected,
-        actual,
+        "expected {expected:?}, got {actual:?} (diff x:{diff_x} y:{diff_y} z:{diff_z}, tolerance {tolerance})",
     );
 }

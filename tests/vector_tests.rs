@@ -138,5 +138,5 @@ fn test_dot_is_cosine_of_angle() {
     let vec = Vec3::new(1.0, 1.0, 0.0);
     let dot = vec.normalize().dot(Vec3::X);
 
-    assert_close(dot, 0.7071067811865476, TOLERANCE);
+    assert_close(dot, std::f64::consts::FRAC_1_SQRT_2, TOLERANCE);
 }
