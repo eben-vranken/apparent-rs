@@ -15,9 +15,7 @@ impl Vec3 {
     }
 
     pub fn length(self) -> f64 {
-        let sum: f64 = self.x.powi(2) + self.y.powi(2) + self.z.powi(2);
-
-        sum.sqrt()
+        self.length_squared().sqrt()
     }
 
     pub fn length_squared(self) -> f64 {

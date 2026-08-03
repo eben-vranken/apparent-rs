@@ -6,5 +6,5 @@ fn main() {
 
     let vec_a: Vec3 = Vec3::new(3.0, 4.0, 0.0);
 
-    println!("{:?}", vec_a.length_squared())
+    println!("{:?}", vec_a.length())
 }
