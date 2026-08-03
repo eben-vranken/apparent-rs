@@ -101,3 +101,41 @@ fn test_neg() {
 
     assert_eq!(-vec_a, Vec3::new(-1.0, -2.0, -3.0));
 }
+
+#[test]
+fn test_dot_of_perpendicular_is_zero() {
+    let dot = Vec3::X.dot(Vec3::Y);
+
+    assert_eq!(dot, 0.0);
+}
+
+#[test]
+fn test_dot_of_parallel_unit_vectors_is_one() {
+    let dot = Vec3::X.dot(Vec3::X);
+
+    assert_eq!(dot, 1.0);
+}
+
+#[test]
+fn test_dot_of_opposite_unit_vectors_is_minus_one() {
+    let dot = Vec3::X.dot(-Vec3::X);
+
+    assert_eq!(dot, -1.0);
+}
+
+#[test]
+fn test_dot_general_vectors() {
+    let vec_a = Vec3::new(1.0, 2.0, 3.0);
+    let vec_b = Vec3::new(4.0, 5.0, 6.0);
+    let dot = vec_a.dot(vec_b);
+
+    assert_eq!(dot, 32.0);
+}
+
+#[test]
+fn test_dot_is_cone_of_angle() {
+    let vec = Vec3::new(1.0, 1.0, 0.0);
+    let dot = vec.normalize().dot(Vec3::X);
+
+    assert_close(dot, 0.7071067811865476, TOLERANCE);
+}
