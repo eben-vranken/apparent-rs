@@ -1,7 +1,7 @@
 mod common;
 
 use apparent_rs::vec3::Vec3;
-use common::assert_close_vector;
+use common::{assert_close, assert_close_vector};
 
 pub const TOLERANCE: f64 = 1e-9;
 
@@ -38,4 +38,25 @@ fn test_normalize_scales_to_unit_length() {
     let vec = Vec3::new(3.0, 4.0, 0.0).normalize();
 
     assert_close_vector(vec, Vec3::new(0.6, 0.8, 0.0), TOLERANCE);
+}
+
+#[test]
+fn test_normalize_of_unit_vector_is_unchanged() {
+    let vec = Vec3::Z.normalize();
+
+    assert_eq!(vec, Vec3::Z);
+}
+
+#[test]
+fn test_normalize_shrinks_long_vector() {
+    let vec = Vec3::new(2.0, 0.0, 0.0).normalize();
+
+    assert_eq!(vec, Vec3::X);
+}
+
+#[test]
+fn test_normalize_general_vector_has_unit_length() {
+    let vec = Vec3::new(1.0, 2.0, 3.0).normalize().length();
+
+    assert_close(vec, 1.0, TOLERANCE);
 }
