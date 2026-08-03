@@ -16,5 +16,5 @@ fn main() {
         z: 1.0,
     };
 
-    println!("{:?}", vec_a * 22.0)
+    println!("{:?}", -vec_a * 10.0)
 }
