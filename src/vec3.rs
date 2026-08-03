@@ -14,10 +14,14 @@ impl Vec3 {
         Self { x: x, y: y, z: z }
     }
 
-    pub fn length(&self) -> f64 {
-        let sum: f64 = &self.x.powi(2) + &self.y.powi(2) + &self.z.powi(2);
+    pub fn length(self) -> f64 {
+        let sum: f64 = self.x.powi(2) + self.y.powi(2) + self.z.powi(2);
 
         sum.sqrt()
+    }
+
+    pub fn length_squared(self) -> f64 {
+        self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
     }
 }
 
