@@ -46,13 +46,6 @@ impl CalendarDate {
         }
     }
 
-    pub const fn unwrap_const(result: Result<Self, CalendarError>) -> Self {
-        match result {
-            Ok(date) => date,
-            Err(_) => panic!("invalid CalendarDate literal"),
-        }
-    }
-
     // Setter
     pub const fn new(
         year: i32,
