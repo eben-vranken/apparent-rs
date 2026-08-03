@@ -1,3 +1,4 @@
+use crate::angles::normalize_2pi;
 use std::ops::{Add, Mul, Neg, Sub};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -66,6 +67,13 @@ impl Vec3 {
             y: lat_cos * lon_sin,
             z: lat_sin,
         }
+    }
+
+    pub fn to_spherical(self) -> (f64, f64) {
+        let lon = normalize_2pi(self.y.atan2(self.x));
+        let lat = self.z.atan2(self.x.hypot(self.y));
+
+        (lon, lat)
     }
 }
 
