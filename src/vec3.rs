@@ -32,3 +32,15 @@ impl Sub for Vec3 {
         }
     }
 }
+
+impl Mul<f64> for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self: Vec3, scale: f64) -> Vec3 {
+        Vec3 {
+            x: self.x * scale,
+            y: self.y * scale,
+            z: self.z * scale,
+        }
+    }
+}
