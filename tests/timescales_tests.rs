@@ -1,5 +1,8 @@
+mod common;
+
 use apparent_rs::calendar;
 use apparent_rs::timescales;
+use common::assert_close;
 
 pub const TOLERANCE: f64 = 1e-9;
 
@@ -179,13 +182,4 @@ fn get_jd(year: i32, month: u8, day: u8, hour: u8, minute: u8, second: f64) -> t
     let date = calendar::CalendarDate::new(year, month, day, hour, minute, second)
         .expect("Not a valid date");
     timescales::JdUtc::from_calendar(&date)
-}
-
-#[track_caller]
-fn assert_close(actual: f64, expected: f64, tolerance: f64) {
-    let diff = (actual - expected).abs();
-    assert!(
-        diff <= tolerance,
-        "expected {expected}, got {actual} (diff {diff}, tolerance {tolerance})"
-    );
 }
