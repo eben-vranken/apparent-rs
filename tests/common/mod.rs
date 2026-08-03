@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use apparent_rs::vec3::Vec3;
 
 #[track_caller]
