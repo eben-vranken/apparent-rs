@@ -73,10 +73,11 @@ fn test_add() {
 #[test]
 fn test_sub() {
     let vec_a = Vec3::new(1.0, 2.0, 3.0);
-    let vec_b = Vec3::new(4.0, 5.0, 6.0);
+    let vec_b = Vec3::new(5.0, 7.0, 9.0);
+
     let sub_vec = vec_b - vec_a;
 
-    assert_eq!(sub_vec, Vec3::new(3.0, 3.0, 3.0));
+    assert_eq!(sub_vec, Vec3::new(4.0, 5.0, 6.0));
 }
 
 #[test]
