@@ -56,6 +56,17 @@ impl Vec3 {
     pub fn dot(self, other: Vec3) -> f64 {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
+
+    pub fn from_spherical(lon: f64, lat: f64) -> Vec3 {
+        let (lat_sin, lat_cos) = lat.sin_cos();
+        let (lon_sin, lon_cos) = lon.sin_cos();
+
+        Self {
+            x: lat_cos * lon_cos,
+            y: lat_cos * lon_sin,
+            z: lat_sin,
+        }
+    }
 }
 
 impl Add for Vec3 {
