@@ -33,7 +33,7 @@ fn test_julian_day_zero_date() {
 #[test]
 fn test_arbitrary_time_of_day() {
     let jd = get_jd(2002, 12, 15, 18, 37, 12.5);
-    assert_close(jd.value(), 2452624.27583912037, TOLERANCE)
+    assert_close(jd.value(), 2_452_624.275_839_12, TOLERANCE)
 }
 
 #[test]
@@ -45,7 +45,7 @@ fn test_leap_day_jd() {
 #[test]
 fn test_non_leap_century_february_end() {
     let jd = get_jd(1900, 2, 28, 23, 59, 59.0);
-    assert_close(jd.value(), 2415079.49998842593, TOLERANCE)
+    assert_close(jd.value(), 2_415_079.499_988_426, TOLERANCE)
 }
 
 #[test]
@@ -89,8 +89,7 @@ fn test_utc_to_julian_date_roundtrip() {
                     let round_trip_date = jd.to_calendar().expect("Not a valid date!");
                     assert_eq!(
                         date, round_trip_date,
-                        "Expected {:?} found {:?}",
-                        date, round_trip_date
+                        "Expected {date:?} found {round_trip_date:?}",
                     );
                 }
             }

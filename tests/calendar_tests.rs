@@ -32,25 +32,25 @@ fn test_invalid_day_lower_bound() {
 
 #[test]
 fn test_invalid_leap_year() {
-    let date = CalendarDate::new(2002, 02, 29, 12, 30, 0.0);
+    let date = CalendarDate::new(2002, 2, 29, 12, 30, 0.0);
     assert_eq!(date, Err(CalendarError::InvalidDay))
 }
 
 #[test]
 fn test_valid_leap_year() {
-    let date = CalendarDate::new(2024, 02, 29, 12, 30, 0.0);
+    let date = CalendarDate::new(2024, 2, 29, 12, 30, 0.0);
     assert!(date.is_ok())
 }
 
 #[test]
 fn test_in_valid_century_leap_year() {
-    let date = CalendarDate::new(1900, 02, 29, 12, 30, 0.0);
+    let date = CalendarDate::new(1900, 2, 29, 12, 30, 0.0);
     assert_eq!(date, Err(CalendarError::InvalidDay))
 }
 
 #[test]
 fn test_valid_century_leap_year() {
-    let date = CalendarDate::new(2000, 02, 29, 12, 30, 0.0);
+    let date = CalendarDate::new(2000, 2, 29, 12, 30, 0.0);
     assert!(date.is_ok())
 }
 
@@ -76,9 +76,7 @@ fn test_all_months_day_limits() {
         let valid = CalendarDate::new(non_leap_year, month, max_day, 0, 0, 0.0);
         assert!(
             valid.is_ok(),
-            "Expected month {} day {} to be valid",
-            month,
-            max_day
+            "Expected month {month} day {max_day} to be valid",
         );
 
         let invalid = CalendarDate::new(non_leap_year, month, max_day + 1, 0, 0, 0.0);
