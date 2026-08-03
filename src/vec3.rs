@@ -31,6 +31,10 @@ impl Vec3 {
             z: self.z / len,
         }
     }
+
+    pub fn dot(self, other: Vec3) -> f64 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
 }
 
 impl Add for Vec3 {
