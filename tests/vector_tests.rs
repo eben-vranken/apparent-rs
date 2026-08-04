@@ -1,5 +1,8 @@
 mod common;
 
+use std::assert_eq;
+
+use apparent_rs::constants::PI;
 use apparent_rs::vec3::Vec3;
 use common::{assert_close, assert_close_vector};
 
@@ -139,4 +142,92 @@ fn test_dot_is_cosine_of_angle() {
     let dot = vec.normalize().dot(Vec3::X);
 
     assert_close(dot, std::f64::consts::FRAC_1_SQRT_2, TOLERANCE);
+}
+
+#[test]
+fn test_from_spherical_origin_is_x() {
+    let vec = Vec3::from_spherical(0.0, 0.0);
+
+    assert_eq!(vec, Vec3::X);
+}
+
+#[test]
+fn test_from_spherical_quarter_turn_is_y() {
+    let vec = Vec3::from_spherical(PI / 2.0, 0.0);
+
+    assert_close_vector(vec, Vec3::Y, TOLERANCE);
+}
+
+#[test]
+fn test_from_spherical_half_turn_is_negative() {
+    let vec = Vec3::from_spherical(PI, 0.0);
+
+    assert_close_vector(vec, Vec3::new(-1.0, 0.0, 0.0), TOLERANCE);
+}
+
+#[test]
+fn test_from_spherical_north_pole_is_z() {
+    let vec = Vec3::from_spherical(0.0, PI / 2.0);
+
+    assert_close_vector(vec, Vec3::Z, TOLERANCE);
+}
+
+#[test]
+fn test_from_spherical_south_pole_is_negative_z() {
+    let vec = Vec3::from_spherical(0.0, -PI / 2.0);
+
+    assert_close_vector(vec, -Vec3::Z, TOLERANCE);
+}
+
+#[test]
+fn test_from_spherical_negative_latitude() {
+    let vec = Vec3::from_spherical(0.0, -PI / 4.0);
+
+    assert_close_vector(
+        vec,
+        Vec3::new(
+            std::f64::consts::FRAC_1_SQRT_2,
+            0.0,
+            -std::f64::consts::FRAC_1_SQRT_2,
+        ),
+        TOLERANCE,
+    );
+}
+
+#[test]
+fn test_from_spherical_vega() {
+    let vec = Vec3::from_spherical(279.2348, 38.78369);
+
+    assert_close_vector(
+        vec,
+        Vec3::new(0.125028368297772, -0.769430155208644, 0.626372990666014),
+        1e9,
+    );
+}
+
+#[test]
+fn test_from_spherical_is_always_unit_length() {
+    let len = Vec3::from_spherical(0.0, 0.0).length();
+    assert_close(len, 1.0, TOLERANCE);
+
+    let len = Vec3::from_spherical(45.0, 30.0).length();
+    assert_close(len, 1.0, TOLERANCE);
+
+    let len = Vec3::from_spherical(135.0, -20.0).length();
+    assert_close(len, 1.0, TOLERANCE);
+
+    let len = Vec3::from_spherical(200.0, 60.0).length();
+    assert_close(len, 1.0, TOLERANCE);
+
+    let len = Vec3::from_spherical(300.0, -75.0).length();
+    assert_close(len, 1.0, TOLERANCE);
+
+    let len = Vec3::from_spherical(0.0, 89.9999).length();
+    assert_close(len, 1.0, TOLERANCE);
+
+    let len = Vec3::from_spherical(-30.0, 10.0).length();
+    assert_close(len, 1.0, TOLERANCE);
+
+    let len = Vec3::from_spherical(400.0, 5.0).length();
+    assert_close(len, 1.0, TOLERANCE);
 }
