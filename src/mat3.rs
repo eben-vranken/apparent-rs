@@ -31,6 +31,24 @@ impl Mat3 {
             Vec3::new(self.row_x.z, self.row_y.z, self.row_z.z),
         )
     }
+
+    pub fn rx(phi: f64) -> Mat3 {
+        let (sin, cos) = phi.sin_cos();
+
+        Mat3::new(Vec3::X, Vec3::new(0.0, cos, sin), Vec3::new(0.0, -sin, cos))
+    }
+
+    pub fn ry(theta: f64) -> Mat3 {
+        let (sin, cos) = theta.sin_cos();
+
+        Mat3::new(Vec3::new(cos, 0.0, -sin), Vec3::Y, Vec3::new(sin, 0.0, cos))
+    }
+
+    pub fn rz(psi: f64) -> Mat3 {
+        let (sin, cos) = psi.sin_cos();
+
+        Mat3::new(Vec3::new(cos, sin, 0.0), Vec3::new(-sin, cos, 0.0), Vec3::Z)
+    }
 }
 
 impl Mul<Vec3> for Mat3 {
