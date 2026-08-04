@@ -1,4 +1,8 @@
-use crate::constants::{HIPPARCOS_EPOCH_JD, RADIANS_PER_DEGREE, RADIANS_PER_MILLIARCSECOND};
+use crate::constants::{
+    DAYS_PER_JULIAN_YEAR, HIPPARCOS_EPOCH_JD, RADIANS_PER_DEGREE, RADIANS_PER_MILLIARCSECOND,
+};
+use crate::timescales::JdTt;
+use crate::vec3::Vec3;
 
 // I have added comments as to what these values mean, cause I will forget.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -44,6 +48,23 @@ impl CatalogStar {
             rv_km_per_s,
             epoch_jd_tt,
         }
+    }
+
+    pub fn position_at(&self, jd_tt: &JdTt) -> Vec3 {
+        let elapsed_years =
+            ((jd_tt.day() - self.epoch_jd_tt) + jd_tt.fraction()) / DAYS_PER_JULIAN_YEAR;
+
+        let catalog_position = Vec3::from_spherical(self.ra_rad, self.dec_rad);
+
+        let (sin_ra, cos_ra) = self.ra_rad.sin_cos();
+        let (sin_dec, cos_dec) = self.dec_rad.sin_cos();
+
+        let east = Vec3::new(-sin_ra, cos_ra, 0.0);
+        let north = Vec3::new(-sin_dec * cos_ra, -sin_dec * sin_ra, cos_dec);
+
+        let motion_per_year = east * self.pm_ra_cosdec_rad_per_yr + north * self.pm_dec_rad_per_yr;
+
+        (catalog_position + motion_per_year * elapsed_years).normalize()
     }
 
     /// Vega, alpha Lyrae, HIP 91262.
