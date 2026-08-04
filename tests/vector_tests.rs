@@ -207,29 +207,26 @@ fn test_from_spherical_vega() {
 
 #[test]
 fn test_from_spherical_is_always_unit_length() {
-    let len = Vec3::from_spherical(0.0, 0.0).length();
-    assert_close(len, 1.0, TOLERANCE);
+    let cases = [
+        (0.0, 0.0),
+        (45.0, 30.0),
+        (135.0, -20.0),
+        (200.0, 60.0),
+        (300.0, -75.0),
+        (0.0, 89.9999),
+        (-30.0, 10.0),
+        (400.0, 5.0),
+    ];
 
-    let len = Vec3::from_spherical(45.0, 30.0).length();
-    assert_close(len, 1.0, TOLERANCE);
+    for (lon, lat) in cases {
+        let len = Vec3::from_spherical(lon * RADIANS_PER_DEGREE, lat * RADIANS_PER_DEGREE).length();
+        let diff = (len - 1.0).abs();
 
-    let len = Vec3::from_spherical(135.0, -20.0).length();
-    assert_close(len, 1.0, TOLERANCE);
-
-    let len = Vec3::from_spherical(200.0, 60.0).length();
-    assert_close(len, 1.0, TOLERANCE);
-
-    let len = Vec3::from_spherical(300.0, -75.0).length();
-    assert_close(len, 1.0, TOLERANCE);
-
-    let len = Vec3::from_spherical(0.0, 89.9999).length();
-    assert_close(len, 1.0, TOLERANCE);
-
-    let len = Vec3::from_spherical(-30.0, 10.0).length();
-    assert_close(len, 1.0, TOLERANCE);
-
-    let len = Vec3::from_spherical(400.0, 5.0).length();
-    assert_close(len, 1.0, TOLERANCE);
+        assert!(
+            diff <= TOLERANCE,
+            "lon {lon}, lat {lat}: expected unit length, got {len} (diff {diff})"
+        );
+    }
 }
 
 #[test]
