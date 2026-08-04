@@ -8,6 +8,7 @@ pub const NANOS_PER_SECOND: f64 = 1e9;
 
 // Julian dates epochs
 pub const J2000_EPOCH_JD: f64 = 2_451_545.0;
+pub const HIPPARCOS_EPOCH_JD: f64 = 2_448_349.062_5; // J1991.25
 pub const UNIX_EPOCH_JD: f64 = 2_440_587.5;
 pub const MJD_EPOCH_JD: f64 = 2_400_000.5;
 
