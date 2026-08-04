@@ -231,3 +231,43 @@ fn test_from_spherical_is_always_unit_length() {
     let len = Vec3::from_spherical(400.0, 5.0).length();
     assert_close(len, 1.0, TOLERANCE);
 }
+
+#[test]
+fn test_to_spherical_x_is_origin() {
+    let (lon, lat) = Vec3::X.to_spherical();
+
+    assert_eq!(lon, 0.0);
+    assert_eq!(lat, 0.0);
+}
+
+#[test]
+fn test_to_spherical_y_is_quarter_turn() {
+    let (lon, lat) = Vec3::Y.to_spherical();
+
+    assert_eq!(lon, PI / 2.0);
+    assert_eq!(lat, 0.0);
+}
+
+#[test]
+fn test_to_spherical_z_is_pole() {
+    let (lon, lat) = Vec3::Z.to_spherical();
+
+    assert_eq!(lon, 0.0);
+    assert_eq!(lat, PI / 2.0);
+}
+
+#[test]
+fn test_to_spherical_negative_y_wraps_to_three_quarters() {
+    let (lon, lat) = Vec3::new(0.0, -1.0, 0.0).to_spherical();
+
+    assert_eq!(lon, 3.0 * PI / 2.0);
+    assert_eq!(lat, 0.0);
+}
+
+#[test]
+fn test_to_spherical_ignores_magnitude() {
+    let (lon, lat) = Vec3::new(0.0, 0.0, 5.0).to_spherical();
+
+    assert_eq!(lon, 0.0);
+    assert_eq!(lat, PI / 2.0);
+}
