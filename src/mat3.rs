@@ -16,7 +16,7 @@ impl Mat3 {
         row_z: Vec3::Z,
     };
 
-    pub fn new(row_x: Vec3, row_y: Vec3, row_z: Vec3) -> Self {
+    pub const fn new(row_x: Vec3, row_y: Vec3, row_z: Vec3) -> Self {
         Self {
             row_x,
             row_y,
