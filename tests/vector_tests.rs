@@ -2,7 +2,7 @@ mod common;
 
 use std::assert_eq;
 
-use apparent_rs::constants::PI;
+use apparent_rs::constants::{PI, RADIANS_PER_DEGREE};
 use apparent_rs::vec3::Vec3;
 use common::{assert_close, assert_close_vector};
 
@@ -270,4 +270,62 @@ fn test_to_spherical_ignores_magnitude() {
 
     assert_eq!(lon, 0.0);
     assert_eq!(lat, PI / 2.0);
+}
+
+#[test]
+fn test_round_trip_vega() {
+    let (start_lon, start_lat) = (279.2348, 38.78369);
+    let vec = Vec3::from_spherical(
+        start_lon * RADIANS_PER_DEGREE,
+        start_lat * RADIANS_PER_DEGREE,
+    );
+    let (lon, lat) = vec.to_spherical();
+
+    assert_close(lon / RADIANS_PER_DEGREE, start_lon, TOLERANCE);
+    assert_close(lat / RADIANS_PER_DEGREE, start_lat, TOLERANCE);
+}
+
+#[test]
+fn test_round_trip_spread_across_sky() {
+    let cases = [
+        (0.0, 0.0),
+        (45.0, 30.0),
+        (135.0, -20.0),
+        (180.0, 0.0),
+        (200.0, 60.0),
+        (300.0, -75.0),
+        (359.9, 5.0),
+        (0.1, -45.0),
+    ];
+
+    for (start_lon, start_lat) in cases {
+        let vec = Vec3::from_spherical(
+            start_lon * RADIANS_PER_DEGREE,
+            start_lat * RADIANS_PER_DEGREE,
+        );
+        let (lon, lat) = vec.to_spherical();
+
+        assert_close(lon / RADIANS_PER_DEGREE, start_lon, TOLERANCE);
+        assert_close(lat / RADIANS_PER_DEGREE, start_lat, TOLERANCE);
+    }
+}
+
+#[test]
+fn test_round_trip_near_north_pole() {
+    let (start_lon, start_lat) = (0.0, 89.9999);
+    let vec = Vec3::from_spherical(start_lon, start_lat * RADIANS_PER_DEGREE);
+    let (lon, lat) = vec.to_spherical();
+
+    assert_close(lon, start_lon, TOLERANCE);
+    assert_close(lat / RADIANS_PER_DEGREE, start_lat, TOLERANCE);
+}
+
+#[test]
+fn test_round_trip_near_south_pole() {
+    let (start_lon, start_lat) = (0.0, -89.9999);
+    let vec = Vec3::from_spherical(start_lon, start_lat * RADIANS_PER_DEGREE);
+    let (lon, lat) = vec.to_spherical();
+
+    assert_close(lon, start_lon, TOLERANCE);
+    assert_close(lat / RADIANS_PER_DEGREE, start_lat, TOLERANCE);
 }
