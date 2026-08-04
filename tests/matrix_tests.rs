@@ -109,3 +109,24 @@ fn test_transpose_twice_is_original() {
 
     assert_eq!(matrix, A);
 }
+
+#[test]
+fn test_rx_of_zero_is_identity() {
+    let matrix = Mat3::rx(0.0);
+
+    assert_eq!(matrix, Mat3::IDENTITY);
+}
+
+#[test]
+fn test_ry_of_zero_is_identity() {
+    let matrix = Mat3::ry(0.0);
+
+    assert_eq!(matrix, Mat3::IDENTITY);
+}
+
+#[test]
+fn test_rz_of_zero_is_identity() {
+    let matrix = Mat3::rz(0.0);
+
+    assert_eq!(matrix, Mat3::IDENTITY);
+}
