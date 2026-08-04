@@ -196,12 +196,12 @@ fn test_from_spherical_negative_latitude() {
 
 #[test]
 fn test_from_spherical_vega() {
-    let vec = Vec3::from_spherical(279.2348, 38.78369);
+    let vec = Vec3::from_spherical(279.2348 * RADIANS_PER_DEGREE, 38.78369 * RADIANS_PER_DEGREE);
 
     assert_close_vector(
         vec,
-        Vec3::new(0.125028368297772, -0.769430155208644, 0.626372990666014),
-        1e9,
+        Vec3::new(0.1250973375, -0.7694129743, 0.6263819371),
+        1e-9,
     );
 }
 
