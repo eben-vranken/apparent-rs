@@ -16,23 +16,23 @@ const B: Mat3 = Mat3::new(
 
 #[test]
 fn test_identity_times_vector_is_unchanged() {
-    let matrix = Mat3::IDENTITY * Vec3::new(1.0, 2.0, 3.0);
+    let vec = Mat3::IDENTITY * Vec3::new(1.0, 2.0, 3.0);
 
-    assert_eq!(matrix, Vec3::new(1.0, 2.0, 3.0));
+    assert_eq!(vec, Vec3::new(1.0, 2.0, 3.0));
 }
 
 #[test]
 fn test_multiply_by_vector_general() {
-    let matrix = A * Vec3::new(1.0, 2.0, 3.0);
+    let vec = A * Vec3::new(1.0, 2.0, 3.0);
 
-    assert_eq!(matrix, Vec3::new(14.0, 32.0, 50.0));
+    assert_eq!(vec, Vec3::new(14.0, 32.0, 50.0));
 }
 
 #[test]
 fn test_multiply_by_vector_uses_rows() {
-    let matrix = A * Vec3::X;
+    let vec = A * Vec3::X;
 
-    assert_eq!(matrix, Vec3::new(1.0, 4.0, 7.0));
+    assert_eq!(vec, Vec3::new(1.0, 4.0, 7.0));
 }
 
 #[test]
@@ -77,9 +77,9 @@ fn test_multiply_matrix_is_not_commutative() {
 #[test]
 fn test_multiply_by_matrix_composes() {
     let v = Vec3::new(1.0, 2.0, 3.0);
-    let matrix = (A * B) * v;
+    let vec = (A * B) * v;
 
-    assert_eq!(matrix, A * (B * v));
+    assert_eq!(vec, A * (B * v));
 }
 
 #[test]
