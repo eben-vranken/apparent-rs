@@ -81,3 +81,31 @@ fn test_multiply_by_matrix_composes() {
 
     assert_eq!(matrix, A * (B * v));
 }
+
+#[test]
+fn test_transpose_of_identity_is_identity() {
+    let matrix = Mat3::IDENTITY.transpose();
+
+    assert_eq!(matrix, Mat3::IDENTITY);
+}
+
+#[test]
+fn test_transpose_swaps_rows_and_columns() {
+    let matrix = A.transpose();
+
+    assert_eq!(
+        matrix,
+        Mat3::new(
+            Vec3::new(1.0, 4.0, 7.0),
+            Vec3::new(2.0, 5.0, 8.0),
+            Vec3::new(3.0, 6.0, 9.0),
+        )
+    );
+}
+
+#[test]
+fn test_transpose_twice_is_original() {
+    let matrix = A.transpose().transpose();
+
+    assert_eq!(matrix, A);
+}
