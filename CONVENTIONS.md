@@ -5,7 +5,7 @@ This is a document that will help me keep track of all design choices, so that I
 
 #### Angles
 1. Angles are radians internally. Degrees/hours only at print and parse.
-Gaia catalogue only uses degrees so I have no choice to parse them, radians for printing would be messy and not easily understood.
+Gaia catalog only uses degrees so I have no choice to parse them, radians for printing would be messy and not easily understood.
 2. normalize_2pi returns [0, 2π), normalize_pi returns [-π, π).
 Both include the low end and exclude the high end, so I only have to remember one rule instead of two. Exactly half a turn comes back as -π, never +π.
 

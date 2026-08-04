@@ -2,7 +2,7 @@ use crate::constants::{HIPPARCOS_EPOCH_JD, RADIANS_PER_DEGREE, RADIANS_PER_MILLI
 
 // I have added comments as to what these values mean, cause I will forget.
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct CatalogueStar {
+pub struct CatalogStar {
     /// ICRS right ascension at `epoch_jd_tt`
     pub ra_rad: f64,
     /// ICRS declination at `epoch_jd_tt`
@@ -21,11 +21,11 @@ pub struct CatalogueStar {
     /// Radial velocity
     pub rv_km_per_s: f64,
 
-    /// Hipparcos is J2000, Gaia DR3 is 2016.0
+    /// Hipparcos is J1991.25, Gaia DR3 is 2016.0
     pub epoch_jd_tt: f64,
 }
 
-impl CatalogueStar {
+impl CatalogStar {
     pub const fn from_catalog(
         ra_deg: f64,
         dec_deg: f64,
@@ -46,7 +46,17 @@ impl CatalogueStar {
         }
     }
 
-    pub const VEGA: CatalogueStar = CatalogueStar::from_catalog(
+    /// Vega, alpha Lyrae, HIP 91262.
+    ///
+    /// Astrometry (RA, Dec, proper motions, parallax): Hipparcos re-reduction,
+    /// van Leeuwen 2007, VizieR I/311/hip2. Position is at epoch J1991.25, NOT J2000
+    /// https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=I/311/hip2&HIP=91262
+    /// Retrieved 4th of August 2026.
+    ///
+    /// Radial velocity: SIMBAD, from 2004A&A...420..183A.
+    /// https://simbad.u-strasbg.fr/simbad/sim-id?Ident=HIP+91262
+    /// Retrieved 4th of August 2026.
+    pub const VEGA: CatalogStar = CatalogStar::from_catalog(
         279.23410825,
         38.78299326,
         200.94,

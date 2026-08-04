@@ -1,7 +1,7 @@
-use apparent_rs::stars::CatalogueStar;
+use apparent_rs::stars::CatalogStar;
 
 fn main() {
     println!("Hello, stars!");
 
-    println!("{:?}", CatalogueStar::VEGA);
+    println!("{:?}", CatalogStar::VEGA);
 }
