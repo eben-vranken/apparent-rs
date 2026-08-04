@@ -139,42 +139,125 @@ fn test_rz_of_zero_is_identity() {
 
 #[test]
 fn test_rx_leaves_x_axis_fixed() {
-    let matrix = Mat3::rx(0.7) * Vec3::X;
+    let vec = Mat3::rx(0.7) * Vec3::X;
 
-    assert_eq!(matrix, Vec3::X);
+    assert_eq!(vec, Vec3::X);
 }
 
 #[test]
 fn test_ry_leaves_y_axis_fixed() {
-    let matrix = Mat3::ry(0.7) * Vec3::Y;
+    let vec = Mat3::ry(0.7) * Vec3::Y;
 
-    assert_eq!(matrix, Vec3::Y);
+    assert_eq!(vec, Vec3::Y);
 }
 
 #[test]
 fn test_rz_leaves_z_axis_fixed() {
-    let matrix = Mat3::rz(0.7) * Vec3::Z;
+    let vec = Mat3::rz(0.7) * Vec3::Z;
 
-    assert_eq!(matrix, Vec3::Z);
+    assert_eq!(vec, Vec3::Z);
 }
 
 #[test]
 fn test_rz_quarter_turn_moves_x_to_negative_y() {
-    let matrix = Mat3::rz(PI / 2.0) * Vec3::X;
+    let vec = Mat3::rz(PI / 2.0) * Vec3::X;
 
-    assert_close_vector(matrix, Vec3::new(0.0, -1.0, 0.0), TOLERANCE);
+    assert_close_vector(vec, Vec3::new(0.0, -1.0, 0.0), TOLERANCE);
 }
 
 #[test]
 fn test_rx_quarter_turn_moves_y_to_negative_z() {
-    let matrix = Mat3::rx(PI / 2.0) * Vec3::Y;
+    let vec = Mat3::rx(PI / 2.0) * Vec3::Y;
 
-    assert_close_vector(matrix, Vec3::new(0.0, 0.0, -1.0), TOLERANCE);
+    assert_close_vector(vec, Vec3::new(0.0, 0.0, -1.0), TOLERANCE);
 }
 
 #[test]
 fn test_ry_quarter_turn_moves_z_to_negative_x() {
-    let matrix = Mat3::ry(PI / 2.0) * Vec3::Z;
+    let vec = Mat3::ry(PI / 2.0) * Vec3::Z;
 
-    assert_close_vector(matrix, Vec3::new(-1.0, 0.0, 0.0), TOLERANCE);
+    assert_close_vector(vec, Vec3::new(-1.0, 0.0, 0.0), TOLERANCE);
+}
+
+#[test]
+fn test_rz_angles_add() {
+    let matrix = Mat3::rz(0.3) * Mat3::rz(0.4);
+
+    assert_close_vector(matrix.row_x, Mat3::rz(0.7).row_x, TOLERANCE);
+    assert_close_vector(matrix.row_y, Mat3::rz(0.7).row_y, TOLERANCE);
+    assert_close_vector(matrix.row_z, Mat3::rz(0.7).row_z, TOLERANCE);
+}
+
+#[test]
+fn test_rz_times_transpose_is_identity() {
+    let matrix = Mat3::rz(0.7) * Mat3::rz(0.7).transpose();
+
+    assert_close_vector(matrix.row_x, Mat3::IDENTITY.row_x, TOLERANCE);
+    assert_close_vector(matrix.row_y, Mat3::IDENTITY.row_y, TOLERANCE);
+    assert_close_vector(matrix.row_z, Mat3::IDENTITY.row_z, TOLERANCE);
+}
+
+#[test]
+fn test_rotations_preserve_length() {
+    let v = Vec3::new(1.0, 2.0, 3.0).normalize();
+
+    let rotations = [
+        ("rx", Mat3::rx(0.7)),
+        ("ry", Mat3::ry(0.7)),
+        ("rz", Mat3::rz(0.7)),
+    ];
+
+    for (name, matrix) in rotations {
+        let len = (matrix * v).length();
+        let diff = (len - 1.0).abs();
+
+        assert!(
+            diff <= TOLERANCE,
+            "{name}: expected unit length, got {len} (diff {diff})"
+        );
+    }
+}
+
+#[test]
+fn test_rotations_do_not_commute() {
+    let matrix_a = Mat3::rz(0.5) * Mat3::ry(0.5);
+    let matrix_b = Mat3::ry(0.5) * Mat3::rz(0.5);
+    assert_ne!(matrix_a, matrix_b);
+}
+
+#[test]
+fn test_rotation_determinants_are_plus_one() {
+    let rotations = [
+        ("rx", Mat3::rx(0.7)),
+        ("ry", Mat3::ry(0.7)),
+        ("rz", Mat3::rz(0.7)),
+    ];
+
+    for (name, matrix) in rotations {
+        let det = matrix.determinant();
+        let diff = (det - 1.0).abs();
+
+        assert!(
+            diff <= TOLERANCE,
+            "{name}: expected determinant +1, got {det} (diff {diff})"
+        );
+    }
+}
+
+#[test]
+fn test_determinant_of_identity_is_one() {
+    let det = Mat3::IDENTITY.determinant();
+    assert_eq!(det, 1.0);
+}
+
+#[test]
+fn test_determinant_of_singular_matrix_is_zero() {
+    let det = A.determinant();
+    assert_eq!(det, 0.0);
+}
+
+#[test]
+fn test_determinant_of_reflection_is_minus_one() {
+    let det = Mat3::new(Vec3::X, Vec3::Y, Vec3::new(0.0, 0.0, -1.0)).determinant();
+    assert_eq!(det, -1.0);
 }

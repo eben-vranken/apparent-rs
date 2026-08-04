@@ -32,6 +32,13 @@ impl Mat3 {
         )
     }
 
+    pub fn determinant(self) -> f64 {
+        let (a, b, c) = (self.row_x, self.row_y, self.row_z);
+
+        a.x * (b.y * c.z - b.z * c.y) - a.y * (b.x * c.z - b.z * c.x)
+            + a.z * (b.x * c.y - b.y * c.x)
+    }
+
     pub fn rx(phi: f64) -> Mat3 {
         let (sin, cos) = phi.sin_cos();
 
