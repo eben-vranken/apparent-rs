@@ -1,5 +1,11 @@
+mod common;
+
+use apparent_rs::constants::PI;
 use apparent_rs::mat3::Mat3;
 use apparent_rs::vec3::Vec3;
+use common::assert_close_vector;
+
+const TOLERANCE: f64 = 1e-12;
 
 // Fixtures
 const A: Mat3 = Mat3::new(
@@ -150,4 +156,25 @@ fn test_rz_leaves_z_axis_fixed() {
     let matrix = Mat3::rz(0.7) * Vec3::Z;
 
     assert_eq!(matrix, Vec3::Z);
+}
+
+#[test]
+fn test_rz_quarter_turn_moves_x_to_negative_y() {
+    let matrix = Mat3::rz(PI / 2.0) * Vec3::X;
+
+    assert_close_vector(matrix, Vec3::new(0.0, -1.0, 0.0), TOLERANCE);
+}
+
+#[test]
+fn test_rx_quarter_turn_moves_y_to_negative_z() {
+    let matrix = Mat3::rx(PI / 2.0) * Vec3::Y;
+
+    assert_close_vector(matrix, Vec3::new(0.0, 0.0, -1.0), TOLERANCE);
+}
+
+#[test]
+fn test_ry_quarter_turn_moves_z_to_negative_x() {
+    let matrix = Mat3::ry(PI / 2.0) * Vec3::Z;
+
+    assert_close_vector(matrix, Vec3::new(-1.0, 0.0, 0.0), TOLERANCE);
 }
