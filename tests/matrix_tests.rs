@@ -130,3 +130,24 @@ fn test_rz_of_zero_is_identity() {
 
     assert_eq!(matrix, Mat3::IDENTITY);
 }
+
+#[test]
+fn test_rx_leaves_x_axis_fixed() {
+    let matrix = Mat3::rx(0.7) * Vec3::X;
+
+    assert_eq!(matrix, Vec3::X);
+}
+
+#[test]
+fn test_ry_leaves_y_axis_fixed() {
+    let matrix = Mat3::ry(0.7) * Vec3::Y;
+
+    assert_eq!(matrix, Vec3::Y);
+}
+
+#[test]
+fn test_rz_leaves_z_axis_fixed() {
+    let matrix = Mat3::rz(0.7) * Vec3::Z;
+
+    assert_eq!(matrix, Vec3::Z);
+}
