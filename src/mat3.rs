@@ -10,21 +10,9 @@ pub struct Mat3 {
 
 impl Mat3 {
     pub const IDENTITY: Mat3 = Self {
-        row_x: Vec3 {
-            x: 1.0,
-            y: 0.0,
-            z: 0.0,
-        },
-        row_y: Vec3 {
-            x: 0.0,
-            y: 1.0,
-            z: 0.0,
-        },
-        row_z: Vec3 {
-            x: 0.0,
-            y: 0.0,
-            z: 1.0,
-        },
+        row_x: Vec3::X,
+        row_y: Vec3::Y,
+        row_z: Vec3::Z,
     };
 
     pub fn new(row_x: Vec3, row_y: Vec3, row_z: Vec3) -> Self {
