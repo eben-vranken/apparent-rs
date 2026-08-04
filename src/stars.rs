@@ -5,7 +5,7 @@ use crate::constants::{RADIANS_PER_DEGREE, RADIANS_PER_MILLIARCSECOND};
 pub struct CatalogueStar {
     /// ICRS right ascension at `epoch_jd_tt`
     pub ra_rad: f64,
-    // ICRS declination at `epoch_jd_tt`
+    /// ICRS declination at `epoch_jd_tt`
     pub dec_rad: f64,
 
     /// Proper motion in right ascension, already multiplied by cos(dec)
