@@ -48,7 +48,7 @@ impl Equatorial {
     }
 
     pub fn ra_hours(&self) -> f64 {
-        self.ra_deg() / RADIANS_PER_HOUR
+        self.ra_rad / RADIANS_PER_HOUR
     }
 
     // Doesn't need new since to_spherical can't produce an out-of-range declination

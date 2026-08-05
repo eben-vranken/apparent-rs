@@ -10,7 +10,7 @@ fn main() {
     let vega_equatorial = Equatorial::from_vec3(vega_now);
     println!(
         "Asc: {:?} Dec: {:?}",
-        vega_equatorial.ra_deg(),
+        vega_equatorial.ra_hours(),
         vega_equatorial.dec_deg()
     );
 }
