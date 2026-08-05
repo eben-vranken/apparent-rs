@@ -47,4 +47,8 @@ impl Equatorial {
     pub fn dec_deg(&self) -> f64 {
         return self.dec_rad / RADIANS_PER_DEGREE;
     }
+
+    pub fn ra_hours(&self) -> f64 {
+        return self.ra_deg() / 15.0;
+    }
 }
