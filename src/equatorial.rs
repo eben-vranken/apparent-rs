@@ -4,8 +4,8 @@ use crate::vec3::Vec3;
 
 #[derive(Debug, PartialEq)]
 pub enum EquatorialError {
-    DeclinationRangeError,
-    NonFiniteError,
+    DeclinationRange,
+    NonFinite,
 }
 
 // Private fields, so I can validate them.
@@ -19,8 +19,12 @@ pub struct Equatorial {
 
 impl Equatorial {
     pub fn new(ra_rad: f64, dec_rad: f64) -> Result<Self, EquatorialError> {
+        if !ra_rad.is_finite() || !dec_rad.is_finite() {
+            return Err(EquatorialError::NonFinite);
+        }
+
         if !((-PI / 2.0)..=(PI / 2.0)).contains(&dec_rad) {
-            return Err(EquatorialError::DeclinationRangeError);
+            return Err(EquatorialError::DeclinationRange);
         }
 
         let right_asc = normalize_2pi(ra_rad);
@@ -29,6 +33,10 @@ impl Equatorial {
             ra_rad: right_asc,
             dec_rad,
         })
+    }
+
+    pub fn from_degrees(ra_deg: f64, dec_deg: f64) -> Result<Self, EquatorialError> {
+        Equatorial::new(ra_deg * RADIANS_PER_DEGREE, dec_deg * RADIANS_PER_DEGREE)
     }
 
     pub fn ra_rad(&self) -> f64 {
