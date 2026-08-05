@@ -17,7 +17,7 @@ fn main() {
         declination / RADIANS_PER_DEGREE
     );
 
-    let res = Equatorial::new(0.0, PI / 2.0);
+    let res = Equatorial::new(0.0, PI / 2.0).expect("Failed to parse equatorial");
 
-    println!("{:?}", res);
+    println!("{:?}", res.dec_deg());
 }

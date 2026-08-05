@@ -1,4 +1,7 @@
-use crate::{angles::normalize_2pi, constants::PI};
+use crate::{
+    angles::normalize_2pi,
+    constants::{PI, RADIANS_PER_DEGREE},
+};
 
 #[derive(Debug, PartialEq)]
 pub enum EquatorialError {
@@ -27,5 +30,21 @@ impl Equatorial {
             ra_rad: right_asc,
             dec_rad,
         })
+    }
+
+    pub fn ra_rad(&self) -> f64 {
+        self.ra_rad
+    }
+
+    pub fn dec_rad(&self) -> f64 {
+        self.dec_rad
+    }
+
+    pub fn ra_deg(&self) -> f64 {
+        return self.ra_rad / RADIANS_PER_DEGREE;
+    }
+
+    pub fn dec_deg(&self) -> f64 {
+        return self.dec_rad / RADIANS_PER_DEGREE;
     }
 }
