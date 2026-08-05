@@ -1,4 +1,6 @@
+use apparent_rs::constants::PI;
 use apparent_rs::constants::RADIANS_PER_DEGREE;
+use apparent_rs::equatorial::Equatorial;
 use apparent_rs::stars::CatalogStar;
 use apparent_rs::timescales::JdTt;
 use apparent_rs::vec3::Vec3;
@@ -14,4 +16,8 @@ fn main() {
         right_ascension / RADIANS_PER_DEGREE,
         declination / RADIANS_PER_DEGREE
     );
+
+    let res = Equatorial::new(0.0, PI / 2.0);
+
+    println!("{:?}", res);
 }
