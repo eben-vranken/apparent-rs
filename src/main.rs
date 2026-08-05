@@ -5,12 +5,7 @@ use apparent_rs::timescales::JdTt;
 fn main() {
     println!("Hello, stars!");
 
-    println!("{:?}", CatalogStar::VEGA);
-    let vega_now = CatalogStar::VEGA.position_at(&JdTt::new(2451545.0, 0.0));
+    let vega_now = CatalogStar::VEGA.position_at(&JdTt::now().unwrap());
     let vega_equatorial = Equatorial::from_vec3(vega_now);
-    println!(
-        "Asc: {:?} Dec: {:?}",
-        vega_equatorial.ra_hours(),
-        vega_equatorial.dec_deg()
-    );
+    println!("{vega_equatorial}");
 }
