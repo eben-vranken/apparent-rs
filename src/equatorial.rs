@@ -1,7 +1,6 @@
-use crate::{
-    angles::normalize_2pi,
-    constants::{PI, RADIANS_PER_DEGREE},
-};
+use crate::angles::normalize_2pi;
+use crate::constants::{PI, RADIANS_PER_DEGREE, RADIANS_PER_HOUR};
+use crate::vec3::Vec3;
 
 #[derive(Debug, PartialEq)]
 pub enum EquatorialError {
@@ -41,14 +40,25 @@ impl Equatorial {
     }
 
     pub fn ra_deg(&self) -> f64 {
-        return self.ra_rad / RADIANS_PER_DEGREE;
+        self.ra_rad / RADIANS_PER_DEGREE
     }
 
     pub fn dec_deg(&self) -> f64 {
-        return self.dec_rad / RADIANS_PER_DEGREE;
+        self.dec_rad / RADIANS_PER_DEGREE
     }
 
     pub fn ra_hours(&self) -> f64 {
-        return self.ra_deg() / 15.0;
+        self.ra_deg() / RADIANS_PER_HOUR
+    }
+
+    // Doesn't need new since to_spherical can't produce an out-of-range declination
+    pub fn from_vec3(v: Vec3) -> Self {
+        let (ra_rad, dec_rad) = v.to_spherical();
+
+        Self { ra_rad, dec_rad }
+    }
+
+    pub fn to_vec3(&self) -> Vec3 {
+        Vec3::from_spherical(self.ra_rad(), self.dec_rad())
     }
 }
