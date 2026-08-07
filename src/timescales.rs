@@ -17,7 +17,7 @@ pub struct JdUtc {
 }
 
 impl JdUtc {
-    pub fn new(day: f64, fraction: f64) -> Self {
+    pub const fn new(day: f64, fraction: f64) -> Self {
         Self { day, fraction }
     }
 
@@ -66,7 +66,7 @@ pub struct JdTt {
 }
 
 impl JdTt {
-    pub fn new(day: f64, fraction: f64) -> Self {
+    pub const fn new(day: f64, fraction: f64) -> Self {
         Self { day, fraction }
     }
 
@@ -117,7 +117,7 @@ pub struct JdUt1 {
 }
 
 impl JdUt1 {
-    pub fn new(day: f64, fraction: f64) -> Self {
+    pub const fn new(day: f64, fraction: f64) -> Self {
         Self { day, fraction }
     }
 
