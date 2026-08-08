@@ -87,7 +87,7 @@ fn test_zero_elapsed_returns_catalog_position() {
     let position = CatalogStar::VEGA.position_at(&JdTt::new(HIPPARCOS_EPOCH_JD, 0.0));
 
     assert_close_vector(
-        position,
+        position.as_vec3(),
         Vec3::from_spherical(CatalogStar::VEGA.ra_rad, CatalogStar::VEGA.dec_rad),
         TOLERANCE_RAD,
     );
@@ -117,18 +117,18 @@ fn test_motion_before_catalog_epoch_reverses() {
 fn test_pure_ra_motion_moves_toward_east() {
     let position = synthetic_star(0.0, 0.0, PM_MAS, 0.0).position_at(&ONE_YEAR_LATER);
 
-    assert_close(position.y, STEP_RAD, TOLERANCE_RAD);
-    assert_close(position.x, 1.0, TOLERANCE_RAD);
-    assert_eq!(position.z, 0.0);
+    assert_close(position.as_vec3().y, STEP_RAD, TOLERANCE_RAD);
+    assert_close(position.as_vec3().x, 1.0, TOLERANCE_RAD);
+    assert_eq!(position.as_vec3().z, 0.0);
 }
 
 #[test]
 fn test_pure_dec_motion_moves_toward_north() {
     let position = synthetic_star(0.0, 0.0, 0.0, PM_MAS).position_at(&ONE_YEAR_LATER);
 
-    assert_close(position.z, STEP_RAD, TOLERANCE_RAD);
-    assert_close(position.x, 1.0, TOLERANCE_RAD);
-    assert_eq!(position.y, 0.0);
+    assert_close(position.as_vec3().z, STEP_RAD, TOLERANCE_RAD);
+    assert_close(position.as_vec3().x, 1.0, TOLERANCE_RAD);
+    assert_eq!(position.as_vec3().y, 0.0);
 }
 
 #[test]
