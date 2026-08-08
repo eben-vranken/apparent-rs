@@ -5,6 +5,7 @@ pub mod direction;
 pub mod equatorial;
 pub mod frames;
 pub mod mat3;
+pub mod rotation;
 pub mod stars;
 pub mod timescales;
 pub mod vec3;
