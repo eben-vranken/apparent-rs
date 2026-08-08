@@ -8,3 +8,7 @@ Read [conventions](CONVENTIONS.md) for future guidelines.
 --- 
 
 Work in progress; currently implementing the foundational math and time systems.
+
+---
+
+<img src="readme_image.png">
