@@ -1,0 +1,10 @@
+error[E0277]: cannot multiply `Rotation<Icrs, MeanOfDate>` by `Rotation<Icrs, MeanOfDate>`
+ --> tests/ui/mismatched_composition.rs:9:16
+  |
+9 |     let _ = r2 * r1;
+  |                ^ no implementation for `Rotation<Icrs, MeanOfDate> * Rotation<Icrs, MeanOfDate>`
+  |
+  = help: the trait `Mul` is not implemented for `Rotation<Icrs, MeanOfDate>`
+  = help: the following other types implement trait `Mul<Rhs>`:
+            `Rotation<A, B>` implements `Mul<Direction<A>>`
+            `Rotation<B, C>` implements `Mul<Rotation<A, B>>`

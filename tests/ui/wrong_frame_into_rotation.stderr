@@ -1,0 +1,10 @@
+error[E0277]: cannot multiply `Rotation<MeanOfDate, Icrs>` by `Direction<Icrs>`
+  --> tests/ui/wrong_frame_into_rotation.rs:10:15
+   |
+10 |     let _ = r * d;
+   |               ^ no implementation for `Rotation<MeanOfDate, Icrs> * Direction<Icrs>`
+   |
+   = help: the trait `Mul<Direction<Icrs>>` is not implemented for `Rotation<MeanOfDate, Icrs>`
+   = help: the following other types implement trait `Mul<Rhs>`:
+             `Rotation<A, B>` implements `Mul<Direction<A>>`
+             `Rotation<B, C>` implements `Mul<Rotation<A, B>>`
