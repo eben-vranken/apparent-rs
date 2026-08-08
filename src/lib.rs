@@ -1,6 +1,7 @@
 pub mod angles;
 pub mod calendar;
 pub mod constants;
+pub mod direction;
 pub mod equatorial;
 pub mod frames;
 pub mod mat3;
