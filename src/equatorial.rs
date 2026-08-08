@@ -1,8 +1,10 @@
 use core::fmt;
+use std::marker::PhantomData;
 
 use crate::angles::normalize_2pi;
 use crate::constants::{PI, RADIANS_PER_DEGREE, RADIANS_PER_HOUR};
-use crate::vec3::Vec3;
+use crate::direction::Direction;
+use crate::frames::Frame;
 
 #[derive(Debug, PartialEq)]
 pub enum EquatorialError {
@@ -14,12 +16,13 @@ pub enum EquatorialError {
 // Declination: -90 to +90 (degrees)
 // Right ascension: 0 - 360 (degrees)
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct Equatorial {
+pub struct Equatorial<F: Frame> {
     ra_rad: f64,
     dec_rad: f64,
+    frame: PhantomData<F>,
 }
 
-impl Equatorial {
+impl<F: Frame> Equatorial<F> {
     pub fn new(ra_rad: f64, dec_rad: f64) -> Result<Self, EquatorialError> {
         if !ra_rad.is_finite() || !dec_rad.is_finite() {
             return Err(EquatorialError::NonFinite);
@@ -34,11 +37,12 @@ impl Equatorial {
         Ok(Self {
             ra_rad: right_asc,
             dec_rad,
+            frame: PhantomData,
         })
     }
 
     pub fn from_degrees(ra_deg: f64, dec_deg: f64) -> Result<Self, EquatorialError> {
-        Equatorial::new(ra_deg * RADIANS_PER_DEGREE, dec_deg * RADIANS_PER_DEGREE)
+        Self::new(ra_deg * RADIANS_PER_DEGREE, dec_deg * RADIANS_PER_DEGREE)
     }
 
     pub fn ra_rad(&self) -> f64 {
@@ -61,15 +65,18 @@ impl Equatorial {
         self.ra_rad / RADIANS_PER_HOUR
     }
 
-    // Doesn't need new since to_spherical can't produce an out-of-range declination
-    pub fn from_vec3(v: Vec3) -> Self {
-        let (ra_rad, dec_rad) = v.to_spherical();
+    pub fn from_direction(d: Direction<F>) -> Self {
+        let (ra_rad, dec_rad) = d.to_spherical();
 
-        Self { ra_rad, dec_rad }
+        Self {
+            ra_rad,
+            dec_rad,
+            frame: PhantomData,
+        }
     }
 
-    pub fn to_vec3(&self) -> Vec3 {
-        Vec3::from_spherical(self.ra_rad(), self.dec_rad())
+    pub fn to_direction(&self) -> Direction<F> {
+        Direction::from_spherical(self.ra_rad(), self.dec_rad())
     }
 }
 
@@ -86,7 +93,7 @@ fn split_sexagesimal(total: f64, decimals: u32) -> (u32, u32, f64) {
     (first as u32, second as u32, third)
 }
 
-impl fmt::Display for Equatorial {
+impl<F: Frame> fmt::Display for Equatorial<F> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let ra_seconds = self.ra_hours() * 3600.0;
         let (h_unnormalized, m, s) = split_sexagesimal(ra_seconds, 5);
@@ -99,8 +106,8 @@ impl fmt::Display for Equatorial {
 
         write!(
             f,
-            "{:02}h {:02}m {:08.5}s {}{:02}° {:02}' {:07.4}\"",
-            h, m, s, sign, d, am, arcsec
+            "{} {h:02}h {m:02}m {s:08.5}s {sign}{d:02}° {am:02}' {arcsec:07.4}\"",
+            F::NAME
         )
     }
 }
